@@ -130,14 +130,16 @@ class _EditProfileState extends State<EditProfile> {
                                 onPickImageButtonClicked();
                               },
                               child: ProfilePic(
-                                picUrl: "https://jugaad-sahi-hai.mustansirg.in/static/" +
-                                    UserStore().token['profile_photo'].toString(),
+                                picUrl:
+                                    "https://jugaad-sahi-hai.mustansirg.in/static/" +
+                                        UserStore()
+                                            .token['profile_photo']
+                                            .toString(),
                                 name: UserStore().token['username'].toString(),
                               ),
                             ),
                           ),
                         ),
-
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 20.0),
                     child: Column(

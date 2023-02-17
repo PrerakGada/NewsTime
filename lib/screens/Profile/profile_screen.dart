@@ -19,6 +19,13 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   int currentIndex = 0;
   var pageController = PageController();
+  int currentindex = -1;
+  List itemList = [
+    'Liked News',
+    'BookMarks',
+    'Get Rent Agreement',
+    'Remove Post'
+  ];
 
   @override
   void initState() {
@@ -121,23 +128,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     horizontal: MediaQuery.of(context).size.width * 0.1),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    ProfileContentNavButton(
-                      currentIndex: currentIndex,
-                      index: 0,
-                      icon: Icons.copy_rounded,
-                      title: 'Posts',
-                      onPress: () {
-                        setState(() {
-                          currentIndex = 0;
-                          pageController.animateToPage(
-                            0,
-                            duration: const Duration(milliseconds: 200),
-                            curve: Curves.linear,
-                          );
-                        });
-                      },
-                    ),
+                  children: const [
+                    // ProfileContentNavButton(
+                    //   currentIndex: currentIndex,
+                    //   index: 0,
+                    //   icon: Icons.copy_rounded,
+                    //   title: 'Posts',
+                    //   onPress: () {
+                    //     setState(() {
+                    //       currentIndex = 0;
+                    //       pageController.animateToPage(
+                    //         0,
+                    //         duration: const Duration(milliseconds: 200),
+                    //         curve: Curves.linear,
+                    //       );
+                    //     });
+                    //   },
+                    // ),
                     // ProfileContentNavButton(
                     //   currentIndex: currentIndex,
                     //   index: 1,
@@ -154,23 +161,66 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     //   },
                     // ),
 
-                    ProfileContentNavButton(
-                      currentIndex: currentIndex,
-                      index: 1,
-                      icon: Icons.bookmark_border,
-                      title: 'Saved',
-                      onPress: () {
-                        setState(() {
-                          currentIndex = 1;
-                          pageController.animateToPage(
-                            1,
-                            duration: const Duration(milliseconds: 200),
-                            curve: Curves.linear,
-                          );
-                        });
-                      },
-                    ),
+                    // ProfileContentNavButton(
+                    //   currentIndex: currentIndex,
+                    //   index: 1,
+                    //   icon: Icons.bookmark_border,
+                    //   title: 'Saved',
+                    //   onPress: () {
+                    //     setState(() {
+                    //       currentIndex = 1;
+                    //       pageController.animateToPage(
+                    //         1,
+                    //         duration: const Duration(milliseconds: 200),
+                    //         curve: Curves.linear,
+                    //       );
+                    //     });
+                    //   },
+                    // ),
                   ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                child: SizedBox(
+                  height: 300,
+                  width: double.infinity,
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.vertical,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 5),
+                        child: InkWell(
+                          onTap: () {
+                            setState(() {
+                              currentindex = index;
+                            });
+                            // currentindex == 1
+                            //     ? Navigator.push(
+                            //         context,
+                            //         PageTransition(
+                            //           child: const PreferencesScreen(),
+                            //           type: PageTransitionType.fade,
+                            //         ),
+                            //       )
+                            //     : null;
+                          },
+                          child: Container(
+                            alignment: Alignment.center,
+                            width: 100,
+                            height: 60,
+                            decoration: BoxDecoration(
+                              color: Colors.grey.withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: Text("${itemList[index]}  >"),
+                          ),
+                        ),
+                      );
+                    },
+                    itemCount: 4,
+                  ),
                 ),
               ),
             ],

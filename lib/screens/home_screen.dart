@@ -98,11 +98,17 @@ class NewsFeedScreen extends StatelessWidget {
   }
 }
 
-class _BreakingNews extends StatelessWidget {
+class _BreakingNews extends StatefulWidget {
   const _BreakingNews({
     Key? key,
   }) : super(key: key);
 
+  @override
+  State<_BreakingNews> createState() => _BreakingNewsState();
+}
+
+class _BreakingNewsState extends State<_BreakingNews> {
+  bool resultofLike = false;
   Future<List<dynamic>> callApis() async {
     var dio = Dio();
     dio.options.baseUrl = 'https://jugaad-sahi-hai.mustansirg.in/';
@@ -114,6 +120,20 @@ class _BreakingNews extends StatelessWidget {
       return response.data;
     } else {
       return [];
+    }
+  }
+
+  Future<bool> likeNews(int id) async {
+    var dio = Dio();
+    dio.options.baseUrl = 'https://jugaad-sahi-hai.mustansirg.in/';
+    dio.options.headers
+        .addAll({'authorization': 'Bearer ${UserStore().APIToken}'});
+
+    final response = await dio.get('/news/liked/${id}');
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
     }
   }
 
@@ -187,7 +207,7 @@ class _BreakingNews extends StatelessWidget {
                                         width:
                                             MediaQuery.of(context).size.width *
                                                 0.6,
-                                        height: 100,
+                                        height: 95,
                                         decoration: const BoxDecoration(
                                             color: Colors.white,
                                             borderRadius: BorderRadius.only(
@@ -196,7 +216,7 @@ class _BreakingNews extends StatelessWidget {
                                                     Radius.circular(15))),
                                         child: Padding(
                                           padding: const EdgeInsets.only(
-                                              left: 5, right: 5),
+                                              left: 10, right: 10),
                                           child: Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
@@ -232,15 +252,18 @@ class _BreakingNews extends StatelessWidget {
                                               ),
                                               Row(
                                                 children: [
-                                                  Text(
-                                                      '${snapshot.data![index]["source"]}',
-                                                      maxLines: 2,
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .bodySmall!),
-                                                  Spacer(),
                                                   Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
                                                     children: [
+                                                      Text(
+                                                          '${snapshot.data![index]["source"]}',
+                                                          maxLines: 2,
+                                                          style:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .bodySmall!),
                                                       Text(
                                                           '${DateTime.now().hour} hours ago',
                                                           maxLines: 2,
@@ -248,11 +271,50 @@ class _BreakingNews extends StatelessWidget {
                                                               Theme.of(context)
                                                                   .textTheme
                                                                   .bodySmall!),
+                                                    ],
+                                                  ),
+                                                  const Spacer(),
+                                                  Column(
+                                                    children: [
                                                       Row(
                                                         children: [
-                                                          Icon(Icons
-                                                              .favorite_rounded),
-                                                          Icon(Icons.bookmark),
+                                                          InkWell(
+                                                            onTap: () async {
+                                                              bool result =
+                                                                  await likeNews(
+                                                                      snapshot.data![
+                                                                              index]
+                                                                          [
+                                                                          "id"]);
+                                                              setState(() {
+                                                                if (result ==
+                                                                    true) {
+                                                                  resultofLike =
+                                                                      true;
+                                                                }
+                                                              });
+                                                            },
+                                                            child: Icon(
+                                                              resultofLike ==
+                                                                      true
+                                                                  ? Icons
+                                                                      .favorite_rounded
+                                                                  : Icons
+                                                                      .favorite_outline_rounded,
+                                                              color:
+                                                                  resultofLike ==
+                                                                          true
+                                                                      ? Colors
+                                                                          .pink
+                                                                      : Colors
+                                                                          .grey,
+                                                            ),
+                                                          ),
+                                                          const Icon(
+                                                            Icons
+                                                                .bookmark_add_outlined,
+                                                            color: Colors.grey,
+                                                          ),
                                                         ],
                                                       )
                                                     ],
