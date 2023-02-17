@@ -38,7 +38,7 @@ class _LabeledTextFormFieldState extends State<LabeledTextFormField> {
       children: [
         Text(
           widget.title,
-          style: TextStyle(color: AppColors.greyLight),
+          style: TextStyle(color: AppColors.black),
         ),
         SizedBox(height: 8),
         Container(

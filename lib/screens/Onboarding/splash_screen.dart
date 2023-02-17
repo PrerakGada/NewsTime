@@ -1,9 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:news_time/screens/dashboard.dart';
+import 'package:news_time/stores/user_store.dart';
 
 import '../onboarding/login_screen.dart';
-
+import 'register_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   static const String id = 'splashscreen';
@@ -25,6 +27,7 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await UserStore().refresh();
       await handleNavigation();
       // await UserStore().getCurrUser();
       // await UserStore().fetchPendingProviders();
@@ -32,7 +35,7 @@ class _SplashScreenState extends State<SplashScreen>
       // await UserStore().fetchNearestRestros("");
     });
     _animationController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 1000));
+        vsync: this, duration: const Duration(milliseconds: 100));
     _animation = CurvedAnimation(
         parent: _animationController,
         curve: Curves.bounceOut,
@@ -44,7 +47,9 @@ class _SplashScreenState extends State<SplashScreen>
       () => Navigator.pushReplacement(
         context,
         PageRouteBuilder(
-          pageBuilder: (_, __, ___) => LoginScreen(),
+          pageBuilder: (_, __, ___) => (UserStore().token != null)
+              ? DashboardScreen()
+              : LoginScreen(),
           transitionDuration: const Duration(milliseconds: 300),
           transitionsBuilder: (_, a, __, c) =>
               FadeTransition(opacity: a, child: c),
@@ -54,6 +59,9 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   handleNavigation() async {
+    print(UserStore().token);
+    // if (UserStore().currUser)
+
     // if (FirebaseAuth.instance.currentUser != null) {
     //   print(UserStore().currUser);
     //   print(await UserStore().getCurrUser());

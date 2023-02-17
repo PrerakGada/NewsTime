@@ -24,7 +24,7 @@ class BottomNavBar extends StatelessWidget {
               child: IconButton(
                 icon: const Icon(Icons.home),
                 onPressed: () {
-                  Navigator.pushNamed(context, HomeScreen.homescreenRoute);
+                  Navigator.pushNamed(context, HomeScreen.id);
                 },
               ),
             ),
@@ -33,7 +33,7 @@ class BottomNavBar extends StatelessWidget {
             icon: IconButton(
               icon: const Icon(Icons.search),
               onPressed: () {
-                Navigator.pushNamed(context, SearchFeed.feedRoute);
+                Navigator.pushNamed(context, SearchFeedScreen.feedRoute);
               },
             ),
             label: "Search"),

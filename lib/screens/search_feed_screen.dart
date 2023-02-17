@@ -7,15 +7,15 @@ import 'package:news_time/widgets/image_container.dart';
 
 import '../Theme/app_colors.dart';
 
-class SearchFeed extends StatefulWidget {
-  const SearchFeed({super.key});
+class SearchFeedScreen extends StatefulWidget {
+  const SearchFeedScreen({super.key});
   static const feedRoute = '/feed';
 
   @override
-  State<SearchFeed> createState() => _SearchFeedState();
+  State<SearchFeedScreen> createState() => _SearchFeedScreenState();
 }
 
-class _SearchFeedState extends State<SearchFeed> {
+class _SearchFeedScreenState extends State<SearchFeedScreen> {
   @override
   Widget build(BuildContext context) {
     List<String> tabs = ["Health", "Politics", "Art", "Food", "Science"];

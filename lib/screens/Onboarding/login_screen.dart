@@ -1,12 +1,17 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:news_time/repositories/auth_repo.dart';
+import 'package:news_time/screens/Onboarding/register_screen.dart';
+import 'package:news_time/screens/Onboarding/splash_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Theme/app_colors.dart';
 import '../../stores/user_store.dart';
 import '../../widgets/LabeledTextFormField.dart';
 
-
 class LoginScreen extends StatefulWidget {
   static const String id = '/login';
+
   const LoginScreen({Key? key}) : super(key: key);
 
   @override
@@ -16,6 +21,8 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final prefs = SharedPreferences.getInstance();
+
   // final LogInService _logInService = LogInService();
 
   @override
@@ -50,17 +57,17 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
                 Text(
                   'Login',
-                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 72, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 24),
                 Container(
-                  height: 300,
-                  width: 300,
+                  // height: 300,
+                  width: MediaQuery.of(context).size.width * 0.9,
                   padding: EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     border: Border.all(),
                     borderRadius: BorderRadius.circular(16),
-                    color: AppColors.grey,
+                    // color: AppColors.grey,
                   ),
                   child: Column(
                     // mainAxisSize: MainAxisSize.min,
@@ -86,11 +93,10 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                         onPressed: () async {
-                          // bool success = await UserStore().login(
-                          //     _emailController.text, _passwordController.text);
-                          //
-                          // if (success)
-                          //   _navigationService.navigateTo(RoutePath.Dashboard);
+                          final status = await UserStore().login(
+                              email: _emailController.text,
+                              password: _passwordController.text);
+                          if (status) Navigator.popAndPushNamed(context, SplashScreen.id);
                         },
                         child: Text(
                           'Login',
@@ -99,7 +105,30 @@ class _LoginScreenState extends State<LoginScreen> {
                               color: AppColors.black,
                               fontWeight: FontWeight.bold),
                         ),
-                      )
+                      ),
+                      SizedBox(height: 10),
+                      RichText(
+                        text: TextSpan(
+                          text: 'New here?',
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: AppColors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          children: <TextSpan>[
+                            TextSpan(
+                                text: ' Sign Up!',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Color(0xff06e357),
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () => Navigator.popAndPushNamed(
+                                      context, RegisterScreen.id)),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
