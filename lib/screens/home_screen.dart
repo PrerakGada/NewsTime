@@ -183,7 +183,7 @@ class _BreakingNews extends StatelessWidget {
                                       child: Container(
                                         width:
                                             MediaQuery.of(context).size.width *
-                                                0.281,
+                                                0.6,
                                         height: 90,
                                         decoration: const BoxDecoration(
                                             color: Colors.white,

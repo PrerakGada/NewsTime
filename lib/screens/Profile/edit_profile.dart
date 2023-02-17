@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:news_time/widgets/LabeledTextFormField.dart';
@@ -24,6 +26,7 @@ class EditProfile extends StatefulWidget {
 class _EditProfileState extends State<EditProfile> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
+  var imageUrl = "";
 
   File? profilePic;
 
@@ -46,6 +49,31 @@ class _EditProfileState extends State<EditProfile> {
   //Image Picker
   late PickedFile _imageFile;
   final ImagePicker _imagePicker = ImagePicker();
+  Future<void> callApis() async {
+    var dio = Dio();
+    dio.options.baseUrl = 'https://jugaad-sahi-hai.mustansirg.in/auth';
+    dio.options.headers
+        .addAll({"Authorization": " Bearer ${UserStore().APIToken}"});
+    print("${UserStore().APIToken}");
+
+    final response = await dio.get('/user/');
+    if (response.statusCode == 200) {
+      _emailController.text = response.data["email"];
+      _nameController.text = response.data["username"];
+      imageUrl = response.data["profile_photo"];
+
+      print(response.data);
+    } else {
+      // return [];
+    }
+  }
+
+  @override
+  void initState() {
+    callApis();
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,19 +107,34 @@ class _EditProfileState extends State<EditProfile> {
               Column(
                 // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  (profilePic != null)
-                      ? Align(
-                          alignment: Alignment.center,
-                          child: Container(
-                            child: Image.file(
-                              profilePic!.absolute,
-                              height: 200,
-                              width: 280,
-                              scale: 2,
-                              fit: BoxFit.fill,
-                            ),
-                          ),
-                        )
+                  (profilePic == null)
+                      ? imageUrl != null
+                          ? Align(
+                              alignment: Alignment.center,
+                              child: Container(
+                                child: ProfilePic(
+                                  picUrl:
+                                      "https://jugaad-sahi-hai.mustansirg.in/static/" +
+                                          UserStore()
+                                              .token['profile_photo']
+                                              .toString(),
+                                  name:
+                                      UserStore().token['username'].toString(),
+                                ),
+                              ),
+                            )
+                          : Align(
+                              alignment: Alignment.center,
+                              child: Container(
+                                child: Image.file(
+                                  profilePic!.absolute,
+                                  height: 200,
+                                  width: 280,
+                                  scale: 2,
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                            )
                       : Align(
                           alignment: Alignment.center,
                           child: Container(
@@ -103,14 +146,16 @@ class _EditProfileState extends State<EditProfile> {
                                 onPickImageButtonClicked();
                               },
                               child: ProfilePic(
-                                picUrl: "https://jugaad-sahi-hai.mustansirg.in/static/" +
-                                    UserStore().token['profile_photo'].toString(),
+                                picUrl:
+                                    "https://jugaad-sahi-hai.mustansirg.in/static/" +
+                                        UserStore()
+                                            .token['profile_photo']
+                                            .toString(),
                                 name: UserStore().token['username'].toString(),
                               ),
                             ),
                           ),
                         ),
-
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 20.0),
                     child: Column(
@@ -171,21 +216,43 @@ class _EditProfileState extends State<EditProfile> {
                 alignment: Alignment.bottomCenter,
                 child: MaterialButton(
                   onPressed: () async {
-                    var urii = Uri.parse(
-                        "https://jugaad-sahi-hai.mustansirg.in/auth/user/");
-                    var request = http.MultipartRequest("PUT", urii);
-                    request.headers.addAll({"Authorization": "Token 25465ab1a8aef9b47b20a40d6e61c41eb5762290"});
-                    request.fields['username'] = 'PrerakGada3';
-                    request.fields['email'] = 'prerak.yoyoyo@gmail.com';
-                    request.files.add(http.MultipartFile.fromBytes('profile_photo', await profilePic!.readAsBytes(), contentType: MediaType('image', 'jpeg')));
-                    // request.files.add(new http.MultipartFile.fromBytes('file', await File.fromUri("<path/to/file>").readAsBytes(), contentType: new MediaType('image', 'jpeg')))
+                    // PUT DATA
+                    // var urii = Uri.parse(
+                    //     "https://jugaad-sahi-hai.mustansirg.in/auth/user/");
+                    // var request = http.MultipartRequest("GET", urii);
+                    // var bytesprofile = await profilePic!.readAsBytes();
+                    // request.headers.addAll({
+                    //   "Authorization":
+                    //       "Bearer ${UserStore().APIToken}"
+                    // });
+                    // request.fields['username'] = 'PrerakGada3';
+                    // request.fields['email'] = 'prerak.yoyoyo@gmail.com';
+                    // request.files.add(http.MultipartFile.fromBytes(
+                    //     'profile_photo', bytesprofile,
+                    //     contentType: MediaType('image', 'jpeg')));
+                    // // request.files.add(new http.MultipartFile.fromBytes('file', await File.fromUri("<path/to/file>").readAsBytes(), contentType: new MediaType('image', 'jpeg')))
 
-                    request.send().then((response) async {
-                      if (response.statusCode == 200) print("Uploaded!");
-                      else print(await response.stream.bytesToString());
-                    });
+                    // var response = await request.send();
 
+                    // GET DATA
+                    var data = await callApis();
+                    // var urii = Uri.parse(
+                    //     "https://jugaad-sahi-hai.mustansirg.in/auth/user/");
+                    // var request = http.MultipartRequest("GET", urii);
+                    // request.headers.addAll({
+                    //   "Authorization":
+                    //       "Bearer ${UserStore().token["APIToken"]}"
+                    // });
+                    // var dio
 
+                    // var response = await request.send();
+
+                    // await http.Response.fromStream(response).then((response) {
+                    //   var body = jsonDecode(response.body);
+                    //   if (response.statusCode == 200) print("Uploaded!");
+                    //   // else
+                    //   //   print(await response.stream.bytesToString());
+                    // });
 
                     // print(_usernameController.text);
                     // print(_bioController.text);
