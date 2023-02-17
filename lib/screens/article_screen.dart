@@ -51,6 +51,12 @@ class _NewsHeadline extends StatelessWidget {
                   ),
             )
           ]),
+          Text(
+            'Politics',
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                  color: AppColors.white,
+                ),
+          )
         ],
       ),
     );
