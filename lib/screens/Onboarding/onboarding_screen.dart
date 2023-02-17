@@ -1,4 +1,6 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../Theme/app_colors.dart';
@@ -24,14 +26,39 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         currentPage = _pageController.page!;
       });
     });
+    initMessaging();
     super.initState();
+  }
+
+  void initMessaging() {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    FlutterLocalNotificationsPlugin fltNotification =
+        FlutterLocalNotificationsPlugin();
+    var androiInit = const AndroidInitializationSettings('@mipmap/ic_launcher');
+    var iosInit = const DarwinInitializationSettings();
+    var initSetting = InitializationSettings(android: androiInit);
+
+    fltNotification.initialize(initSetting);
+    var androidDetails =
+        const AndroidNotificationDetails("default", "channel name");
+    var iosDetails = const DarwinNotificationDetails();
+    var generalNotificationDetails =
+        NotificationDetails(android: androidDetails, iOS: iosDetails);
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      RemoteNotification? notification = message.notification;
+      AndroidNotification? android = message.notification?.android;
+
+      if (notification != null && android != null) {
+        fltNotification.show(notification.hashCode, notification.title,
+            notification.body, generalNotificationDetails);
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.primary,
-
       body: Stack(
         children: [
           PageView(
@@ -64,7 +91,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     activeDotColor: AppColors.primaryAccent,
                   ),
                 ),
-                SizedBox(height: 24),
+                const SizedBox(height: 24),
               ],
             ),
           ),

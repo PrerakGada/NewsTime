@@ -1,6 +1,6 @@
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+
 import 'package:flutter/material.dart';
 import 'package:news_time/screens/article_screen.dart';
 import 'package:news_time/screens/home_screen.dart';
@@ -8,10 +8,8 @@ import 'package:news_time/screens/search_feed_screen.dart';
 import 'package:news_time/screens/Onboarding/register_screen.dart';
 import 'package:news_time/screens/dashboard.dart';
 import 'package:provider/provider.dart';
-
 import 'Theme/dark_theme.dart';
 import 'Theme/light_theme.dart';
-
 import 'firebase_options.dart';
 import 'screens/onboarding/login_screen.dart';
 import 'screens/onboarding/onboarding_screen.dart';

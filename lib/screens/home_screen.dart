@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:news_time/Theme/app_colors.dart';
 import 'package:news_time/screens/profile_screen.dart';
@@ -101,6 +102,18 @@ class _BreakingNews extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
+  Future<List<dynamic>> callApis() async {
+    var dio = Dio();
+    dio.options.baseUrl = 'https://jugaad-sahi-hai.mustansirg.in/';
+
+    final response = await dio.post('/news/');
+    if (response.statusCode == 200) {
+      return response.data;
+    } else {
+      return [];
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -113,7 +126,7 @@ class _BreakingNews extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Breaking News',
+                'For You',
                 style: Theme.of(context).textTheme.headlineSmall!.copyWith(
                     color: AppColors.black, fontWeight: FontWeight.bold),
               ),
@@ -132,48 +145,311 @@ class _BreakingNews extends StatelessWidget {
             height: 5,
           ),
           SizedBox(
-            height: 250,
-            child: ListView.builder(
-              shrinkWrap: true,
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) {
-                return Container(
-                  width: size.width * 0.4,
-                  padding: EdgeInsets.only(right: 10),
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ImageContainer(
-                            width: size.width * 0.4,
-                            imageUrl:
-                                "https://www.hindustantimes.com/ht-img/img/2023/02/17/550x309/Indian-and-Chinese-soldiers-along-the-Line-of-Actu_1670910862390_1676600712301_1676600712301.jpg",
-                            decide: true),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          'Takimata duo sadipscing erat ut sed dolore takimata sadipscing. Magna.',
-                          maxLines: 2,
-                          style:
-                              Theme.of(context).textTheme.bodyLarge!.copyWith(
-                                  // color: AppColors.black,
-                                  fontWeight: FontWeight.bold,
-                                  height: 1.5),
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        Text('${DateTime.now().hour} hours ago',
-                            maxLines: 2,
-                            style: Theme.of(context).textTheme.bodySmall!),
-                        Text('by Shradha Tiwari',
-                            maxLines: 2,
-                            style: Theme.of(context).textTheme.bodySmall!),
-                      ]),
-                );
+            height: 400,
+            child: FutureBuilder(
+              future: callApis(),
+              builder: (context, snapshot) {
+                switch (snapshot.connectionState) {
+                  case ConnectionState.waiting:
+                    return const Center(child: CircularProgressIndicator());
+                  default:
+                    if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    } else if (snapshot.hasData) {
+                      return GridView.builder(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                mainAxisExtent: 230,
+                                crossAxisSpacing: 12,
+                                mainAxisSpacing: 12,
+                                childAspectRatio: 20),
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          return Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                  color: Colors.transparent,
+                                  image: DecorationImage(
+                                      fit: BoxFit.fitHeight,
+                                      image: NetworkImage(
+                                        "${snapshot.data![index]["urlToImage"]}",
+                                      ))),
+                              child: Stack(
+                                children: [
+                                  Positioned(
+                                      bottom: -1,
+                                      child: Container(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.60,
+                                        height: 90,
+                                        decoration: const BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.only(
+                                                bottomLeft: Radius.circular(15),
+                                                bottomRight:
+                                                    Radius.circular(15))),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                '${snapshot.data![index]["title"]}',
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyMedium!
+                                                    .copyWith(
+                                                        // color: AppColors.black,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        height: 1.5),
+                                              ),
+                                              Text(
+                                                '${snapshot.data![index]["description"]}',
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyLarge!
+                                                    .copyWith(
+                                                        // color: AppColors.black,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        height: 1.5),
+                                              ),
+                                              SizedBox(
+                                                height: 3,
+                                              ),
+                                              Row(
+                                                children: [
+                                                  Text(
+                                                      '${snapshot.data![index]["source"]["name"]}',
+                                                      maxLines: 2,
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .bodySmall!),
+                                                  Spacer(),
+                                                  Text(
+                                                      '${DateTime.now().hour} hours ago',
+                                                      maxLines: 2,
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .bodySmall!),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ))
+                                ],
+                              )
+                              // child: Column(
+                              //     crossAxisAlignment: CrossAxisAlignment.start,
+                              //     children: [
+
+                              //     ]),
+                              );
+                          // return Container(
+                          //   width: size.width * 0.1,
+                          //   height: 100,
+                          //   padding: EdgeInsets.only(right: 10),
+                          //   child: Column(
+                          //       crossAxisAlignment: CrossAxisAlignment.start,
+                          //       children: [
+                          //         ImageContainer(
+                          //             width: size.width * 0.4,
+                          //             imageUrl:
+                          //                 "${snapshot.data![index]["urlToImage"]}",
+                          //             decide: true),
+                          //         const SizedBox(
+                          //           height: 10,
+                          //         ),
+                          //         Text(
+                          //           '${snapshot.data![index]["title"]}',
+                          //           maxLines: 2,
+                          //           style: Theme.of(context)
+                          //               .textTheme
+                          //               .bodyLarge!
+                          //               .copyWith(
+                          //                   // color: AppColors.black,
+                          //                   fontWeight: FontWeight.bold,
+                          //                   height: 1.5),
+                          //         ),
+                          //         const SizedBox(
+                          //           height: 5,
+                          //         ),
+                          //         Text('${DateTime.now().hour} hours ago',
+                          //             maxLines: 2,
+                          //             style: Theme.of(context)
+                          //                 .textTheme
+                          //                 .bodySmall!),
+                          //         Text(
+                          //             '${snapshot.data![index]["source"]["name"]}',
+                          //             maxLines: 2,
+                          //             style: Theme.of(context)
+                          //                 .textTheme
+                          //                 .bodySmall!),
+                          //       ]),
+                          // );
+                        },
+                        itemCount: snapshot.data!.length,
+                      );
+                    } else {
+                      return const Text("No data yet");
+                    }
+                }
               },
-              itemCount: 10,
             ),
+            // child:
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Near You',
+                style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                    color: AppColors.black, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              Text(
+                'More',
+                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                      color: AppColors.black,
+                    ),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          SizedBox(
+            height: 350,
+            child: FutureBuilder(
+              future: callApis(),
+              builder: (context, snapshot) {
+                switch (snapshot.connectionState) {
+                  case ConnectionState.waiting:
+                    return const Center(child: CircularProgressIndicator());
+                  default:
+                    if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    } else if (snapshot.hasData) {
+                      return ListView.builder(
+                        // gridDelegate:
+                        //     const SliverGridDelegateWithFixedCrossAxisCount(
+                        //         crossAxisCount: 2,
+                        //         mainAxisExtent: 230,
+                        //         crossAxisSpacing: 12,
+                        //         mainAxisSpacing: 12,
+                        //         childAspectRatio: 20),
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          return Container(
+                            width: size.width * 0.5,
+                            height: 100,
+                            padding: const EdgeInsets.only(right: 5),
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  ImageContainer(
+                                      width: size.width * 0.4,
+                                      imageUrl:
+                                          "${snapshot.data![index]["urlToImage"]}",
+                                      decide: true),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    '${snapshot.data![index]["title"]}',
+                                    maxLines: 2,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge!
+                                        .copyWith(
+                                            // color: AppColors.black,
+                                            fontWeight: FontWeight.bold,
+                                            height: 1.5),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text('${DateTime.now().hour} hours ago',
+                                      maxLines: 2,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall!),
+                                  Text(
+                                      '${snapshot.data![index]["source"]["name"]}',
+                                      maxLines: 2,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall!),
+                                ]),
+                          );
+                          // return Container(
+                          //   width: size.width * 0.1,
+                          //   height: 100,
+                          //   padding: EdgeInsets.only(right: 10),
+                          //   child: Column(
+                          //       crossAxisAlignment: CrossAxisAlignment.start,
+                          //       children: [
+                          //         ImageContainer(
+                          //             width: size.width * 0.4,
+                          //             imageUrl:
+                          //                 "${snapshot.data![index]["urlToImage"]}",
+                          //             decide: true),
+                          //         const SizedBox(
+                          //           height: 10,
+                          //         ),
+                          //         Text(
+                          //           '${snapshot.data![index]["title"]}',
+                          //           maxLines: 2,
+                          //           style: Theme.of(context)
+                          //               .textTheme
+                          //               .bodyLarge!
+                          //               .copyWith(
+                          //                   // color: AppColors.black,
+                          //                   fontWeight: FontWeight.bold,
+                          //                   height: 1.5),
+                          //         ),
+                          //         const SizedBox(
+                          //           height: 5,
+                          //         ),
+                          //         Text('${DateTime.now().hour} hours ago',
+                          //             maxLines: 2,
+                          //             style: Theme.of(context)
+                          //                 .textTheme
+                          //                 .bodySmall!),
+                          //         Text(
+                          //             '${snapshot.data![index]["source"]["name"]}',
+                          //             maxLines: 2,
+                          //             style: Theme.of(context)
+                          //                 .textTheme
+                          //                 .bodySmall!),
+                          //       ]),
+                          // );
+                        },
+                        itemCount: snapshot.data!.length,
+                      );
+                    } else {
+                      return const Text("No data yet");
+                    }
+                }
+              },
+            ),
+            // child:
           )
         ],
       ),
@@ -210,7 +486,7 @@ class _NewsOftheDay extends StatelessWidget {
           const SizedBox(
             height: 10,
           ),
-          Text('Dolores consetetur ipsum eos invidunt sed sadipscing aliquyam.',
+          Text('Heavy Seize Fire Reported Near Kashmir Loc.',
               style: Theme.of(context).textTheme.headlineSmall!.copyWith(
                   color: AppColors.white,
                   fontWeight: FontWeight.bold,
@@ -226,10 +502,10 @@ class _NewsOftheDay extends StatelessWidget {
                           color: AppColors.white,
                         ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
-                  Icon(
+                  const Icon(
                     Icons.arrow_right_alt,
                     color: AppColors.white,
                   )
