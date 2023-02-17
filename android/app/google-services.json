@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "258722761535",
+    "project_id": "newstime-cc7c3",
+    "storage_bucket": "newstime-cc7c3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:258722761535:android:74752c6a581c589ebaa18a",
+        "android_client_info": {
+          "package_name": "com.example.news_time"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "258722761535-bgkv8rs8a9jg3l16e15r6rv2mo1e9fa3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAu1LelRHFVUIHZxRnp6-EvEEXgxsKmwCE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "258722761535-bgkv8rs8a9jg3l16e15r6rv2mo1e9fa3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
