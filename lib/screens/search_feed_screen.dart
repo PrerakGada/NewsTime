@@ -20,24 +20,6 @@ class _SearchFeedScreenState extends State<SearchFeedScreen> {
   @override
   Widget build(BuildContext context) {
     List<String> tabs = ["Health", "Politics", "Art", "Food", "Science"];
-    List listofuser = [];
-    Future<List<dynamic>> callApis() async {
-      var dio = Dio();
-      dio.options.baseUrl = "https://jugaad-sahi-hai.mustansirg.in/";
-
-      ///Get the items list
-
-      final response = await dio.post('/news/');
-      if (response.statusCode == 200) {
-        List userdata = response.data;
-        listofuser = userdata;
-
-        return listofuser;
-      } else {
-        return [];
-      }
-    }
-
     return DefaultTabController(
       initialIndex: 0,
       length: tabs.length,
@@ -53,8 +35,8 @@ class _SearchFeedScreenState extends State<SearchFeedScreen> {
               onPressed: () {},
             )),
         body: ListView(
-            padding: EdgeInsets.only(left: 20, right: 20),
-            children: [_DiscoverNews(), _CustomTabs(tabs: listofuser)]),
+            padding: const EdgeInsets.only(left: 20, right: 20),
+            children: [const _DiscoverNews(), _CustomTabs(tabs: tabs)]),
       ),
     );
   }
@@ -65,7 +47,7 @@ class _CustomTabs extends StatelessWidget {
     Key? key,
     required this.tabs,
   }) : super(key: key);
-  final List<dynamic> tabs;
+  final List<String> tabs;
 
   @override
   Widget build(BuildContext context) {
