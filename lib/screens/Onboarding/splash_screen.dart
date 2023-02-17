@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:news_time/screens/business_screen.dart';
+import 'package:news_time/screens/Explore/business_screen.dart';
 import 'package:news_time/screens/dashboard.dart';
 import 'package:news_time/screens/home_screen.dart';
 import 'package:news_time/stores/user_store.dart';

@@ -1,20 +1,27 @@
 import 'package:flutter/material.dart';
 
-import '../Theme/app_colors.dart';
-import '../widgets/image_container.dart';
+import '../../Theme/app_colors.dart';
+import '../../widgets/image_container.dart';
 import 'article_screen.dart';
 
 class FirstScreen extends StatelessWidget {
-  const FirstScreen({
+  FirstScreen({
     Key? key,
-    required this.tabs,
   }) : super(key: key);
 
-  final List<String> tabs;
+  final List<String> tabs = [
+    "Recommended",
+    "Health",
+    "Politics",
+    "Art",
+    "Food",
+    "Science"
+  ];
 
   @override
   Widget build(BuildContext context) {
     return ListView(
+      physics: NeverScrollableScrollPhysics(),
       padding: const EdgeInsets.only(left: 20, right: 20),
       children: [
         const _DiscoverNews(),
@@ -141,7 +148,7 @@ class _DiscoverNews extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.20,
+      // height: MediaQuery.of(context).size.height * 0.20,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -155,9 +162,7 @@ class _DiscoverNews extends StatelessWidget {
           ),
           Text('News from all over the world',
               style: Theme.of(context).textTheme.bodySmall!),
-          const SizedBox(
-            height: 15,
-          ),
+          const SizedBox(height: 15),
           TextFormField(
             decoration: InputDecoration(
                 hintText: 'Search',

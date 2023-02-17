@@ -13,6 +13,7 @@ import '../widgets/image_container.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
   static const id = "/home";
 
   @override
@@ -22,6 +23,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final PageController _pageController = PageController();
   int currentIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -177,7 +179,7 @@ class _BreakingNews extends StatelessWidget {
                           return InkWell(
                             onTap: () async {
                               //your custom configuration
-                              await ftts.setLanguage("en-US");
+                              await ftts.setLanguage("en-IN");
                               await ftts.setSpeechRate(0.5); //speed of speech
                               await ftts.setVolume(1.0); //volume of speech
                               await ftts.setPitch(1); //pitch of sound
@@ -186,9 +188,10 @@ class _BreakingNews extends StatelessWidget {
                               var result = await ftts
                                   .speak('${snapshot.data![index]["content"]}');
                               if (result == 1) {
-                                //speaking
+                                print('Speaking');
+
                               } else {
-                                //not speaking
+                                print('Not Speaking');
                               }
                             },
                             child: Container(
@@ -205,14 +208,16 @@ class _BreakingNews extends StatelessWidget {
                                     Positioned(
                                         bottom: -1,
                                         child: Container(
-                                          width:
-                                              MediaQuery.of(context).size.width *
-                                                  0.6,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.6,
                                           height: 100,
                                           decoration: const BoxDecoration(
                                               color: Colors.white,
                                               borderRadius: BorderRadius.only(
-                                                  bottomLeft: Radius.circular(15),
+                                                  bottomLeft:
+                                                      Radius.circular(15),
                                                   bottomRight:
                                                       Radius.circular(15))),
                                           child: Padding(
@@ -225,7 +230,8 @@ class _BreakingNews extends StatelessWidget {
                                                 Text(
                                                   '${snapshot.data![index]["title"]}',
                                                   maxLines: 1,
-                                                  overflow: TextOverflow.ellipsis,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
                                                   style: Theme.of(context)
                                                       .textTheme
                                                       .bodyMedium!
@@ -238,7 +244,8 @@ class _BreakingNews extends StatelessWidget {
                                                 Text(
                                                   '${snapshot.data![index]["summary"]}',
                                                   maxLines: 1,
-                                                  overflow: TextOverflow.ellipsis,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
                                                   style: Theme.of(context)
                                                       .textTheme
                                                       .bodyLarge!
@@ -265,15 +272,16 @@ class _BreakingNews extends StatelessWidget {
                                                         Text(
                                                             '${DateTime.now().hour} hours ago',
                                                             maxLines: 2,
-                                                            style:
-                                                                Theme.of(context)
-                                                                    .textTheme
-                                                                    .bodySmall!),
+                                                            style: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .bodySmall!),
                                                         Row(
                                                           children: [
                                                             Icon(Icons
                                                                 .favorite_rounded),
-                                                            Icon(Icons.bookmark),
+                                                            Icon(
+                                                                Icons.bookmark),
                                                           ],
                                                         )
                                                       ],
@@ -394,46 +402,64 @@ class _BreakingNews extends StatelessWidget {
                         shrinkWrap: true,
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (context, index) {
-                          return Container(
-                            width: size.width * 0.5,
-                            height: 100,
-                            padding: const EdgeInsets.only(right: 5),
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  ImageContainer(
-                                      width: size.width * 0.4,
-                                      imageUrl:
-                                          "${snapshot.data![index + 5]["image"]}",
-                                      decide: true),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Text(
-                                    '${snapshot.data![index + 5]["title"]}',
-                                    maxLines: 2,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyLarge!
-                                        .copyWith(
-                                            // color: AppColors.black,
-                                            fontWeight: FontWeight.bold,
-                                            height: 1.5),
-                                  ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  Text('${DateTime.now().hour} hours ago',
+                          return InkWell(
+                            onTap: () async {
+                              //your custom configuration
+                              await ftts.setLanguage("en-US");
+                              await ftts.setSpeechRate(0.5); //speed of speech
+                              await ftts.setVolume(1.0); //volume of speech
+                              await ftts.setPitch(1); //pitc of sound
+
+                              //play text to sp
+                              var result = await ftts.speak(
+                                  "${snapshot.data![index + 5]["content"]}");
+                              if (result == 1) {
+                                //speaking
+                              } else {
+                                //not speaking
+                              }
+                            },
+                            child: Container(
+                              width: size.width * 0.5,
+                              height: 100,
+                              padding: const EdgeInsets.only(right: 5),
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    ImageContainer(
+                                        width: size.width * 0.4,
+                                        imageUrl:
+                                            "${snapshot.data![index + 5]["image"]}",
+                                        decide: true),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    Text(
+                                      '${snapshot.data![index + 5]["title"]}',
                                       maxLines: 2,
                                       style: Theme.of(context)
                                           .textTheme
-                                          .bodySmall!),
-                                  Text('${snapshot.data![index]["source"]}',
-                                      maxLines: 2,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall!),
-                                ]),
+                                          .bodyLarge!
+                                          .copyWith(
+                                              // color: AppColors.black,
+                                              fontWeight: FontWeight.bold,
+                                              height: 1.5),
+                                    ),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text('${DateTime.now().hour} hours ago',
+                                        maxLines: 2,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall!),
+                                    Text('${snapshot.data![index]["source"]}',
+                                        maxLines: 2,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall!),
+                                  ]),
+                            ),
                           );
                           // return Container(
                           //   width: size.width * 0.1,

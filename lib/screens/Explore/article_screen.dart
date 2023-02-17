@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:news_time/Theme/app_colors.dart';
 import 'package:news_time/widgets/image_container.dart';
 
-import '../widgets/custom_tag.dart';
+import '../../widgets/custom_tag.dart';
 
 class ArticleScreen extends StatefulWidget {
   const ArticleScreen({super.key});

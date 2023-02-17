@@ -2,8 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'package:flutter/material.dart';
-import 'package:news_time/screens/article_screen.dart';
-import 'package:news_time/screens/business_screen.dart';
+import 'package:news_time/screens/Explore/article_screen.dart';
+import 'package:news_time/screens/Explore/business_screen.dart';
 import 'package:news_time/screens/home_screen.dart';
 import 'package:news_time/screens/Profile/profile_screen.dart';
 import 'package:news_time/screens/Explore/search_feed_screen.dart';
