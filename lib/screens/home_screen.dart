@@ -229,7 +229,7 @@ class _BreakingNews extends StatelessWidget {
                                               Row(
                                                 children: [
                                                   Text(
-                                                      '${snapshot.data![index]["source"]["name"]}',
+                                                      '${snapshot.data![index]["source"]}',
                                                       maxLines: 2,
                                                       style: Theme.of(context)
                                                           .textTheme
@@ -298,7 +298,7 @@ class _BreakingNews extends StatelessWidget {
                           //       ]),
                           // );
                         },
-                        itemCount: snapshot.data!.length,
+                        itemCount: 20,
                       );
                     } else {
                       return const Text("No data yet");
@@ -366,13 +366,13 @@ class _BreakingNews extends StatelessWidget {
                                   ImageContainer(
                                       width: size.width * 0.4,
                                       imageUrl:
-                                          "${snapshot.data![index]["urlToImage"]}",
+                                          "${snapshot.data![index + 5]["urlToImage"]}",
                                       decide: true),
                                   const SizedBox(
                                     height: 10,
                                   ),
                                   Text(
-                                    '${snapshot.data![index]["title"]}',
+                                    '${snapshot.data![index + 5]["title"]}',
                                     maxLines: 2,
                                     style: Theme.of(context)
                                         .textTheme
@@ -390,8 +390,7 @@ class _BreakingNews extends StatelessWidget {
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodySmall!),
-                                  Text(
-                                      '${snapshot.data![index]["source"]["name"]}',
+                                  Text('${snapshot.data![index]["source"]}',
                                       maxLines: 2,
                                       style: Theme.of(context)
                                           .textTheme
@@ -441,7 +440,7 @@ class _BreakingNews extends StatelessWidget {
                           //       ]),
                           // );
                         },
-                        itemCount: snapshot.data!.length,
+                        itemCount: 20,
                       );
                     } else {
                       return const Text("No data yet");
