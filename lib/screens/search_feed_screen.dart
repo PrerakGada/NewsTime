@@ -9,6 +9,7 @@ import '../Theme/app_colors.dart';
 
 class SearchFeedScreen extends StatefulWidget {
   const SearchFeedScreen({super.key});
+
   static const feedRoute = '/feed';
 
   @override
@@ -33,7 +34,6 @@ class _SearchFeedScreenState extends State<SearchFeedScreen> {
               ),
               onPressed: () {},
             )),
-        bottomNavigationBar: const BottomNavBar(index: 1),
         body: ListView(
             padding: const EdgeInsets.only(left: 20, right: 20),
             children: [const _DiscoverNews(), _CustomTabs(tabs: tabs)]),

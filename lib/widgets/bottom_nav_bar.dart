@@ -1,48 +1,52 @@
 import 'package:flutter/material.dart';
 
-import 'package:news_time/screens/home_screen.dart';
-import 'package:news_time/screens/search_feed_screen.dart';
+import '../Theme/app_colors.dart';
 
 class BottomNavBar extends StatelessWidget {
-  const BottomNavBar({
+  BottomNavBar({
     Key? key,
     required this.index,
+    required this.pageController,
   }) : super(key: key);
+
   final int index;
+  final PageController pageController;
+  int currentIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
-      currentIndex: index,
-      showUnselectedLabels: false,
-      showSelectedLabels: false,
-      selectedItemColor: Colors.black,
-      unselectedItemColor: Colors.black.withAlpha(100),
-      items: [
+      backgroundColor: Colors.white,
+      type: BottomNavigationBarType.fixed,
+      selectedLabelStyle: const TextStyle(color: AppColors.primary),
+      currentIndex: currentIndex,
+      showSelectedLabels: true,
+      showUnselectedLabels: true,
+      selectedItemColor: AppColors.primary,
+      unselectedItemColor: AppColors.black,
+      onTap: (index) {
+        pageController.animateToPage(
+          index,
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.linear,
+        );
+      },
+      items: const [
         BottomNavigationBarItem(
-            icon: Container(
-              margin: const EdgeInsets.only(left: 30),
-              child: IconButton(
-                icon: const Icon(Icons.home),
-                onPressed: () {
-                  Navigator.pushNamed(context, HomeScreen.id);
-                },
-              ),
-            ),
-            label: "Home"),
+          activeIcon: Icon(Icons.flash_on, color: AppColors.primary),
+          label: 'NewsFeed',
+          icon: Icon(Icons.flash_on_outlined),
+        ),
         BottomNavigationBarItem(
-            icon: IconButton(
-              icon: const Icon(Icons.search),
-              onPressed: () {
-                Navigator.pushNamed(context, SearchFeedScreen.feedRoute);
-              },
-            ),
-            label: "Search"),
+          activeIcon: Icon(Icons.explore, color: AppColors.primary),
+          label: 'Explore',
+          icon: Icon(Icons.explore_outlined),
+        ),
         BottomNavigationBarItem(
-            icon: IconButton(
-              icon: const Icon(Icons.settings),
-              onPressed: () {},
-            ),
-            label: "Settings")
+          activeIcon: Icon(Icons.person, color: AppColors.primary),
+          label: 'Profile',
+          icon: Icon(Icons.person_outline),
+        ),
       ],
     );
   }

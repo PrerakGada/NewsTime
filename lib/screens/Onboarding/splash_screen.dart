@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:news_time/screens/dashboard.dart';
+import 'package:news_time/screens/home_screen.dart';
 import 'package:news_time/stores/user_store.dart';
 
 import '../onboarding/login_screen.dart';
@@ -29,10 +30,6 @@ class _SplashScreenState extends State<SplashScreen>
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await UserStore().refresh();
       await handleNavigation();
-      // await UserStore().getCurrUser();
-      // await UserStore().fetchPendingProviders();
-      // await UserStore().fetchPendingOrders("");
-      // await UserStore().fetchNearestRestros("");
     });
     _animationController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 100));
@@ -48,7 +45,7 @@ class _SplashScreenState extends State<SplashScreen>
         context,
         PageRouteBuilder(
           pageBuilder: (_, __, ___) => (UserStore().token != null)
-              ? DashboardScreen()
+              ? HomeScreen()
               : LoginScreen(),
           transitionDuration: const Duration(milliseconds: 300),
           transitionsBuilder: (_, a, __, c) =>

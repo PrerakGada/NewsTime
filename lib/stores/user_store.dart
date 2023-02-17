@@ -17,6 +17,7 @@ class UserStore extends StateKeeper {
   Future refresh() async {
     final prefs = await SharedPreferences.getInstance();
     if (prefs.getString('APIToken') != null) {
+      print(prefs.getString('RefreshToken'));
       var response = await http.post(
         Uri.parse("https://jugaad-sahi-hai.mustansirg.in/auth/token/refresh/"),
         headers: {
