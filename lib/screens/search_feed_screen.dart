@@ -35,8 +35,8 @@ class _SearchFeedScreenState extends State<SearchFeedScreen> {
             )),
         bottomNavigationBar: const BottomNavBar(index: 1),
         body: ListView(
-            padding: EdgeInsets.only(left: 20, right: 20),
-            children: [_DiscoverNews(), _CustomTabs(tabs: tabs)]),
+            padding: const EdgeInsets.only(left: 20, right: 20),
+            children: [const _DiscoverNews(), _CustomTabs(tabs: tabs)]),
       ),
     );
   }

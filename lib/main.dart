@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:news_time/screens/article_screen.dart';
 import 'package:news_time/screens/home_screen.dart';
@@ -68,7 +67,7 @@ class MyApp extends StatelessWidget {
         // initialRoute: ProviderVerification.id,
         // initialRoute: ProviderVerification.id,
         // initialRoute: ExploreMap.id,
-        initialRoute: SplashScreen.id,
+        initialRoute: HomeScreen.id,
         //initialRoute: AdminDashBoard.id,
         routes: {
           SplashScreen.id: (context) => const SplashScreen(),
