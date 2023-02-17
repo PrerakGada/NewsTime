@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:news_time/Theme/app_colors.dart';
 import 'package:news_time/screens/Profile/profile_screen.dart';
-import 'package:news_time/screens/search_feed_screen.dart';
+import 'package:news_time/screens/Explore/search_feed_screen.dart';
 import 'package:news_time/widgets/custom_tag.dart';
 
 import '../widgets/bottom_nav_bar.dart';
@@ -183,7 +183,7 @@ class _BreakingNews extends StatelessWidget {
                                       child: Container(
                                         width:
                                             MediaQuery.of(context).size.width *
-                                                0.60,
+                                                0.281,
                                         height: 90,
                                         decoration: const BoxDecoration(
                                             color: Colors.white,

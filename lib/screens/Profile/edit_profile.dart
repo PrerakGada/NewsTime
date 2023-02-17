@@ -1,17 +1,20 @@
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:http_parser/http_parser.dart';
+import 'package:news_time/widgets/LabeledTextFormField.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:file_picker/file_picker.dart';
 import '../../../Theme/app_colors.dart';
 import 'package:image_picker/image_picker.dart';
-
+import 'package:http/http.dart' as http;
 import '../../stores/user_store.dart';
 import '../../widgets/profile_pic.dart';
 
-
 class EditProfile extends StatefulWidget {
   static const String id = '/edit-profile';
+
   const EditProfile({Key? key}) : super(key: key);
 
   @override
@@ -19,9 +22,26 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends State<EditProfile> {
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
 
-  final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _bioController = TextEditingController();
+  File? profilePic;
+
+  void onPickImageButtonClicked() async {
+    final tempImage =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (tempImage == null) {
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('An error occurred. Failed to pick image!'),
+      ));
+      return;
+    }
+
+    setState(() {
+      profilePic = File(tempImage.path);
+    });
+  }
 
   //Image Picker
   late PickedFile _imageFile;
@@ -59,88 +79,61 @@ class _EditProfileState extends State<EditProfile> {
               Column(
                 // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  ProfilePic(
-          picUrl: "https://jugaad-sahi-hai.mustansirg.in/static/" + UserStore().token['profile_photo'].toString(),
-          name: UserStore().token['username'].toString(),),
-                  // Padding(
-                  //   padding: const EdgeInsets.all(10.0),
-                  //   child: MaterialButton(
-                  //     shape: ContinuousRectangleBorder(
-                  //         borderRadius: BorderRadius.circular(4),
-                  //         side: const BorderSide(color: AppColors.grey)),
-                  //     onPressed: () {
-                  //       print("pressed");
-                  //       showModalBottomSheet(
-                  //         context: context,
-                  //         builder: ((builder) => bottomSheet()),
-                  //       );
-                  //     },
-                  //     child: Text(
-                  //       'Change Profile Image',
-                  //       style: Theme.of(context)
-                  //           .textTheme
-                  //           .headlineMedium
-                  //           ?.merge(const TextStyle(color: AppColors.grey)),
-                  //     ),
-                  //   ),
-                  // ),
+                  (profilePic != null)
+                      ? Align(
+                          alignment: Alignment.center,
+                          child: Container(
+                            child: Image.file(
+                              profilePic!.absolute,
+                              height: 200,
+                              width: 280,
+                              scale: 2,
+                              fit: BoxFit.fill,
+                            ),
+                          ),
+                        )
+                      : Align(
+                          alignment: Alignment.center,
+                          child: Container(
+                            child: MaterialButton(
+                              onPressed: () async {
+                                // if (kIsWeb) {
+                                //   startweb();
+                                // } else {
+                                onPickImageButtonClicked();
+                              },
+                              child: ProfilePic(
+                                picUrl: "https://jugaad-sahi-hai.mustansirg.in/static/" +
+                                    UserStore().token['profile_photo'].toString(),
+                                name: UserStore().token['username'].toString(),
+                              ),
+                            ),
+                          ),
+                        ),
+
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 20.0),
                     child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Name',
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineLarge
-                                ?.merge(
-                                    const TextStyle(color: AppColors.black)),
-                          ),
-                          Consumer<UserStore>(builder: (_, userStore, __) {
-                            // _usernameController.text =
-                            //     userStore.currUser.username!;
-                            return TextFormField(
-                              // onChanged: (value) {
-                              //   setState(() {
-                              //     username = value;
-                              //   });
-                              // },
-                              controller: _usernameController,
-                              // initialValue: userStore.currUser.username,
-                              keyboardType: TextInputType.name,
-                              decoration: const InputDecoration(
-                                hintText: 'Enter your name',
-                              ),
-                            );
-                          }),
-                        ]),
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        LabeledTextFormField(
+                            controller: _nameController,
+                            title: 'Username',
+                            hintTitle:
+                                UserStore().token['username'].toString()),
+                        SizedBox(height: 20),
+                        LabeledTextFormField(
+                            controller: _emailController,
+                            title: 'Email',
+                            hintTitle: UserStore().token['email'].toString()),
+                      ],
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 20.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'Bio ',
-                          style: Theme.of(context)
-                              .textTheme
-                              .headlineLarge
-                              ?.merge(const TextStyle(color: AppColors.black)),
-                        ),
-                        Consumer<UserStore>(builder: (_, userStore, __) {
-                          // _bioController.text = userStore.currUser.bio!;
-                          return TextFormField(
-                            controller: _bioController,
-                            // keyboardType: TextInputType.multiline,
-                            // initialValue: userStore.currUser.bio,
-                            minLines: 1,
-                            maxLines: 5,
-                            decoration: const InputDecoration(
-                              hintText: 'Your Bio',
-                            ),
-                          );
-                        }),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 30),
                           child: MaterialButton(
@@ -154,7 +147,7 @@ class _EditProfileState extends State<EditProfile> {
                               'Apply for verification',
                               style: Theme.of(context)
                                   .textTheme
-                                  .headlineLarge
+                                  .headlineSmall
                                   ?.merge(
                                     const TextStyle(color: AppColors.black),
                                   ),
@@ -178,6 +171,22 @@ class _EditProfileState extends State<EditProfile> {
                 alignment: Alignment.bottomCenter,
                 child: MaterialButton(
                   onPressed: () async {
+                    var urii = Uri.parse(
+                        "https://jugaad-sahi-hai.mustansirg.in/auth/user/");
+                    var request = http.MultipartRequest("PUT", urii);
+                    request.headers.addAll({"Authorization": "Token 25465ab1a8aef9b47b20a40d6e61c41eb5762290"});
+                    request.fields['username'] = 'PrerakGada3';
+                    request.fields['email'] = 'prerak.yoyoyo@gmail.com';
+                    request.files.add(http.MultipartFile.fromBytes('profile_photo', await profilePic!.readAsBytes(), contentType: MediaType('image', 'jpeg')));
+                    // request.files.add(new http.MultipartFile.fromBytes('file', await File.fromUri("<path/to/file>").readAsBytes(), contentType: new MediaType('image', 'jpeg')))
+
+                    request.send().then((response) async {
+                      if (response.statusCode == 200) print("Uploaded!");
+                      else print(await response.stream.bytesToString());
+                    });
+
+
+
                     // print(_usernameController.text);
                     // print(_bioController.text);
 
@@ -275,9 +284,6 @@ class _EditProfileState extends State<EditProfile> {
                   } else {
                     print("Not changed");
                   }
-
-
-
                 },
                 icon: Icon(
                   Icons.image_outlined,
