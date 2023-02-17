@@ -6,7 +6,7 @@ import '../widgets/custom_tag.dart';
 
 class ArticleScreen extends StatefulWidget {
   const ArticleScreen({super.key});
-  static const articleRoute = "/articleRoute";
+  static const id = "/articleRoute";
 
   @override
   State<ArticleScreen> createState() => _ArticleScreenState();

@@ -10,7 +10,7 @@ import '../Theme/app_colors.dart';
 class SearchFeedScreen extends StatefulWidget {
   const SearchFeedScreen({super.key});
 
-  static const feedRoute = '/feed';
+  static const id = '/feed';
 
   @override
   State<SearchFeedScreen> createState() => _SearchFeedScreenState();
@@ -79,7 +79,7 @@ class _CustomTabs extends StatelessWidget {
                           return InkWell(
                             onTap: () {
                               Navigator.pushNamed(
-                                  context, ArticleScreen.articleRoute);
+                                  context, ArticleScreen.id);
                             },
                             child: Row(children: [
                               const ImageContainer(

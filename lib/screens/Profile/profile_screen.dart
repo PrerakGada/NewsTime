@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:news_time/screens/Profile/edit_profile.dart';
+import 'package:news_time/screens/Settings/settings.dart';
 import 'package:provider/provider.dart';
 
-import '../../Theme/app_colors.dart';
-import '../stores/user_store.dart';
-import '../widgets/profile_pic.dart';
+import '../../../Theme/app_colors.dart';
+import '../../stores/user_store.dart';
+import '../../widgets/profile_pic.dart';
 
 class ProfileScreen extends StatefulWidget {
+  static const String id = '/profile';
+
   const ProfileScreen({Key? key}) : super(key: key);
 
   @override
@@ -37,7 +41,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(),
                 onPressed: () {
-                  // _navigationService.navigateTo(RoutePath.Settings);
+                  Navigator.pushNamed(context, Settings.id);
                 },
                 icon: const Icon(Icons.settings),
               ),
@@ -46,34 +50,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Row(
             // mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Consumer<UserStore>(builder: (_, userStore, __) {
-                return ProfilePic(
-                  picUrl: userStore.token['profile_photo'],
-                  name: '',
-                );
-              }),
-              Consumer<UserStore>(builder: (_, userStore, __) {
-                // print(userStore.currUser);
-                // int post_count = userStore.currUser.Posts != null ? userStore.currUser.Posts!.length : 0;
-                // var subscribed_count = userStore.currUser.subscribed;
-                // var subscribers = userStore.currUser.subscribers;
-                return Expanded(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ProfileStatItem(
-                          title: 'Posts',
-                          count: 0),
-                      ProfileStatItem(
-                          title: 'Subscribers',
-                          count: 0),
-                      ProfileStatItem(
-                          title: 'Subscribed',
-                          count:0),
-                    ],
-                  ),
-                );
-              }),
+              ProfilePic(
+                // picUrl: "",
+                picUrl: "https://jugaad-sahi-hai.mustansirg.in/static/" +
+                    UserStore().token['profile_photo'].toString(),
+                name: UserStore().token['username'].toString(),
+              ),
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ProfileStatItem(title: 'Posts', count: 0),
+                    ProfileStatItem(title: 'Subscribers', count: 0),
+                    ProfileStatItem(title: 'Subscribed', count: 0),
+                  ],
+                ),
+              ),
             ],
           ),
           Row(
@@ -106,12 +98,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     borderRadius: BorderRadius.circular(4),
                     side: const BorderSide(color: AppColors.grey)),
                 onPressed: () {
-                  // _navigationService.navigateTo(RoutePath.EditProfile);
+                  Navigator.pushNamed(context, EditProfile.id);
                 },
                 child: Text('Edit Profile',
                     style: Theme.of(context).textTheme.headlineMedium
-                  // ?.merge(const TextStyle(color: AppColors.grey)),
-                ),
+                    // ?.merge(const TextStyle(color: AppColors.grey)),
+                    ),
               ),
             ],
           ),
@@ -183,69 +175,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ],
             ),
           ),
-          Expanded(
-            child: PageView(
-              scrollDirection: Axis.horizontal,
-              controller: pageController,
-              onPageChanged: (int page) {
-                setState(() {
-                  currentIndex = page;
-                });
-              },
-              children: [
-                Center(child: Text('1'),),
-                Center(child: Text('2'),),
-                // Consumer<UserStore>(builder: (_, userStore, __) {
-                //   // final List<Post> posts = userStore.currUserPosts;
-                //
-                //   return ListView.builder(
-                //     itemCount: posts.length,
-                //     itemBuilder: (context, index) {
-                //       final thisPost = posts[index];
-                //       Provider.of<UserStore>(context, listen: false)
-                //           .fetchPostUser(posts[index].userID);
-                //       User postUser = userStore.postUsers[posts[index].userID]!;
-                //       return VideoPost(
-                //         thumbUrl: thisPost.postThumbUrl!,
-                //         likes: thisPost.likes!,
-                //         title: thisPost.desc!,
-                //         videoUrl: thisPost.postVideoUrl!,
-                //         postUser: postUser,
-                //       );
-                //     },
-                //   );
-                // }),
-                // Consumer<UserStore>(builder: (_, userStore, __) {
-                //   final List<Post> posts = userStore.savedPosts;
-                //
-                //   return ListView.builder(
-                //     itemCount: posts.length,
-                //     itemBuilder: (context, index) {
-                //       final thisPost = posts[index];
-                //       Provider.of<UserStore>(context, listen: false)
-                //           .fetchPostUser(posts[index].userID);
-                //       User postUser = userStore.postUsers[posts[index].userID]!;
-                //       return VideoPost(
-                //         thumbUrl: thisPost.postThumbUrl!,
-                //         likes: thisPost.likes!,
-                //         title: thisPost.desc!,
-                //         videoUrl: thisPost.postVideoUrl!,
-                //         postUser: postUser,
-                //       );
-                //     },
-                //   );
-                // }),
-                // SingleChildScrollView(
-                //   scrollDirection: Axis.vertical,
-                //   child: Column(
-                //     children: const [
-                //       Widgets(),
-                //     ],
-                //   ),
-                // ),
-              ],
-            ),
-          )
         ],
       ),
     );
@@ -277,29 +206,29 @@ class ProfileContentNavButton extends StatelessWidget {
         children: [
           currentIndex == index
               ? Icon(
-            icon,
-            color: AppColors.primary,
-          )
+                  icon,
+                  color: AppColors.primary,
+                )
               : Icon(
-            icon,
-          ),
+                  icon,
+                ),
           currentIndex == index
               ? Text(
-            title,
-            style: const TextStyle(
-              color: AppColors.primary,
-              fontSize: 8,
-              fontWeight: FontWeight.w700,
-            ),
-          )
+                  title,
+                  style: const TextStyle(
+                    color: AppColors.primary,
+                    fontSize: 8,
+                    fontWeight: FontWeight.w700,
+                  ),
+                )
               : Text(
-            title,
-            style: const TextStyle(
-              color: AppColors.greyDark,
-              fontSize: 8,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
+                  title,
+                  style: const TextStyle(
+                    color: AppColors.greyDark,
+                    fontSize: 8,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
         ],
       ),
     );
@@ -325,8 +254,8 @@ class ProfileStatItem extends StatelessWidget {
           Text(count.toString(),
               style: Theme.of(context).textTheme.headlineSmall),
           Text(title, style: Theme.of(context).textTheme.headlineSmall
-            // ?.merge(const TextStyle(color: AppColors.greyDark)),
-          ),
+              // ?.merge(const TextStyle(color: AppColors.greyDark)),
+              ),
         ],
       ),
     );

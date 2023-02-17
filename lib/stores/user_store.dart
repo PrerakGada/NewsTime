@@ -30,8 +30,10 @@ class UserStore extends StateKeeper {
       var data = jsonDecode(response.body);
       print("Refresh Response: " + data.toString());
       await prefs.setString('APIToken', data['access']);
-      token = JwtDecoder.decode(data['access']).toString();
-      print("Decoded After Refresh: " + token);
+      print(data);
+      token = JwtDecoder.decode(data['access']);
+      print("Decoded After Refresh: " + token.toString());
+      print("------------------------------" + token['profile_photo']);
       notifyListeners();
     }
   }
@@ -52,11 +54,11 @@ class UserStore extends StateKeeper {
         "password": password,
       }),
     );
-    if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       print(data);
-      await prefs.setString('APIToken', data['access_token']);
-      await prefs.setString('RefreshToken', data['refresh_token']);
+      await prefs.setString('APIToken', data['access']);
+      await prefs.setString('RefreshToken', data['refresh']);
 
       final APIToken = prefs.getString('APIToken');
       token = JwtDecoder.decode(APIToken.toString());
@@ -104,26 +106,10 @@ class UserStore extends StateKeeper {
     }
   }
 
-// Future fetchPendingProviders() async {
-//   pendingProviders = await QueryRepo().fetchPendingApprovals();
-//   print(pendingProviders);
-//   notifyListeners();
-// }
-//
-// Future fetchPendingOrders(String? query) async {
-//   orders = await QueryRepo().fetchOrders(query);
-//   notifyListeners();
-// }
-//
-// Future fetchNearestRestros(String? query) async {
-//   restros = await QueryRepo().fetchRestros(query);
-//   print(restros);
-//   notifyListeners();
-// }
-//
-// Future fetchCompletedProviders() async {
-//   completedProviders = await QueryRepo().fetchCompletedApprovals();
-//   print(completedProviders);
-//   notifyListeners();
-// }
+  Future logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.clear();
+    token = null;
+    notifyListeners();
+  }
 }
