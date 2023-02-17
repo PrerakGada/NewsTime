@@ -148,7 +148,7 @@ class _BreakingNews extends StatelessWidget {
             height: 5,
           ),
           SizedBox(
-            height: 400,
+            height: 420,
             child: FutureBuilder(
               future: callApis(),
               builder: (context, snapshot) {
@@ -166,7 +166,7 @@ class _BreakingNews extends StatelessWidget {
                                 mainAxisExtent: 230,
                                 crossAxisSpacing: 12,
                                 mainAxisSpacing: 12,
-                                childAspectRatio: 20),
+                                childAspectRatio: 30),
                         shrinkWrap: true,
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (context, index) {
@@ -177,7 +177,7 @@ class _BreakingNews extends StatelessWidget {
                                   image: DecorationImage(
                                       fit: BoxFit.fitHeight,
                                       image: NetworkImage(
-                                        "${snapshot.data![index]["urlToImage"]}",
+                                        "${snapshot.data![index]["image"]}",
                                       ))),
                               child: Stack(
                                 children: [
@@ -187,7 +187,7 @@ class _BreakingNews extends StatelessWidget {
                                         width:
                                             MediaQuery.of(context).size.width *
                                                 0.6,
-                                        height: 90,
+                                        height: 100,
                                         decoration: const BoxDecoration(
                                             color: Colors.white,
                                             borderRadius: BorderRadius.only(
@@ -195,7 +195,8 @@ class _BreakingNews extends StatelessWidget {
                                                 bottomRight:
                                                     Radius.circular(15))),
                                         child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
+                                          padding: const EdgeInsets.only(
+                                              left: 5, right: 5),
                                           child: Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
@@ -214,7 +215,7 @@ class _BreakingNews extends StatelessWidget {
                                                         height: 1.5),
                                               ),
                                               Text(
-                                                '${snapshot.data![index]["description"]}',
+                                                '${snapshot.data![index]["summary"]}',
                                                 maxLines: 1,
                                                 overflow: TextOverflow.ellipsis,
                                                 style: Theme.of(context)
@@ -226,7 +227,7 @@ class _BreakingNews extends StatelessWidget {
                                                             FontWeight.bold,
                                                         height: 1.5),
                                               ),
-                                              SizedBox(
+                                              const SizedBox(
                                                 height: 3,
                                               ),
                                               Row(
@@ -238,12 +239,24 @@ class _BreakingNews extends StatelessWidget {
                                                           .textTheme
                                                           .bodySmall!),
                                                   Spacer(),
-                                                  Text(
-                                                      '${DateTime.now().hour} hours ago',
-                                                      maxLines: 2,
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .bodySmall!),
+                                                  Column(
+                                                    children: [
+                                                      Text(
+                                                          '${DateTime.now().hour} hours ago',
+                                                          maxLines: 2,
+                                                          style:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .bodySmall!),
+                                                      Row(
+                                                        children: [
+                                                          Icon(Icons
+                                                              .favorite_rounded),
+                                                          Icon(Icons.bookmark),
+                                                        ],
+                                                      )
+                                                    ],
+                                                  ),
                                                 ],
                                               ),
                                             ],
@@ -369,7 +382,7 @@ class _BreakingNews extends StatelessWidget {
                                   ImageContainer(
                                       width: size.width * 0.4,
                                       imageUrl:
-                                          "${snapshot.data![index + 5]["urlToImage"]}",
+                                          "${snapshot.data![index + 5]["image"]}",
                                       decide: true),
                                   const SizedBox(
                                     height: 10,

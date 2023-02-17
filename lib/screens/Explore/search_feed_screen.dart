@@ -2,10 +2,13 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 import 'package:news_time/screens/article_screen.dart';
+import 'package:news_time/screens/business_screen.dart';
 import 'package:news_time/widgets/bottom_nav_bar.dart';
 import 'package:news_time/widgets/image_container.dart';
 
 import '../../Theme/app_colors.dart';
+import '../../stores/user_store.dart';
+import '../first_feed_screen.dart';
 
 class SearchFeedScreen extends StatefulWidget {
   const SearchFeedScreen({super.key});
@@ -17,6 +20,13 @@ class SearchFeedScreen extends StatefulWidget {
 }
 
 class _SearchFeedScreenState extends State<SearchFeedScreen> {
+  bool _showFirstScreen = true;
+  void _toggleScreen() {
+    setState(() {
+      _showFirstScreen = !_showFirstScreen;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     List<String> tabs = [
@@ -31,6 +41,10 @@ class _SearchFeedScreenState extends State<SearchFeedScreen> {
       initialIndex: 0,
       length: tabs.length,
       child: Scaffold(
+        floatingActionButton: FloatingActionButton(
+          onPressed: _toggleScreen,
+          child: Icon(Icons.swap_horiz),
+        ),
         appBar: AppBar(
             backgroundColor: Colors.transparent,
             elevation: 0,
@@ -41,173 +55,343 @@ class _SearchFeedScreenState extends State<SearchFeedScreen> {
               ),
               onPressed: () {},
             )),
-        body: ListView(
-          padding: const EdgeInsets.only(left: 20, right: 20),
-          children: [
-            const _DiscoverNews(),
-            _CustomTabs(tabs: tabs),
-          ],
-        ),
+        body: _showFirstScreen ? FirstScreen(tabs: tabs) : BusinessScreen(),
       ),
     );
   }
 }
 
-class _CustomTabs extends StatelessWidget {
-  const _CustomTabs({
-    Key? key,
-    required this.tabs,
-  }) : super(key: key);
-  final List<String> tabs;
+class BusinessScreen extends StatefulWidget {
+  const BusinessScreen({super.key});
+  static const id = "/businessRoute";
+
+  @override
+  State<BusinessScreen> createState() => _BusinessScreenState();
+}
+
+class _BusinessScreenState extends State<BusinessScreen> {
+  var businessName = {};
+  final List<String> strings = [
+    'ADANIENT',
+    'ADANIPORTS',
+    'HDFCLIFE',
+    'DIVISLAB',
+    'SBILIFE',
+    'SBIN',
+    'INDUSINDBK',
+    'UPL',
+    'BAJFINANCE',
+    'TECHM'
+  ];
+  Future<Map<dynamic, dynamic>> callApis() async {
+    var dio = Dio();
+    dio.options.baseUrl = 'https://jugaad-sahi-hai.mustansirg.in/';
+    dio.options.headers
+        .addAll({'authorization': 'Bearer ${UserStore().APIToken}'});
+
+    final response = await dio.get('business/?ticker=aapl');
+    if (response.statusCode == 200) {
+      businessName = response.data;
+      return response.data;
+    } else {
+      return {};
+    }
+  }
+
+  Future<List<dynamic>> callBusinessNews() async {
+    var dio = Dio();
+    dio.options.baseUrl = 'https://jugaad-sahi-hai.mustansirg.in/';
+    dio.options.headers
+        .addAll({'authorization': 'Bearer ${UserStore().APIToken}'});
+
+    final response = await dio.get('business/?ticker=AAPL');
+    if (response.statusCode == 200) {
+      // businessName = response.data["articles"];
+      return response.data["articles"];
+    } else {
+      return [];
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    callApis();
+    super.initState();
+    UserStore().RefreshToken;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        TabBar(
-          tabs: tabs
-              .map((e) => Tab(
-                    icon: Text(
-                      e,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium!
-                          .copyWith(fontWeight: FontWeight.bold),
+    var size = MediaQuery.of(context).size;
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(
+              height: 30,
+            ),
+            TextFormField(
+              decoration: InputDecoration(
+                  hintText: 'Search',
+                  fillColor: Colors.grey.shade200,
+                  filled: true,
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide.none),
+                  prefixIcon: const Icon(
+                    Icons.search,
+                    color: AppColors.grey,
+                  ),
+                  suffixIcon: const RotatedBox(
+                    quarterTurns: 1,
+                    child: Icon(
+                      Icons.tune,
+                      color: AppColors.grey,
                     ),
-                  ))
-              .toList(),
-          indicatorColor: Colors.black,
-          isScrollable: true,
-        ),
-        SizedBox(
-          height: MediaQuery.of(context).size.height,
-          child: TabBarView(
-              children: tabs
-                  .map((e) => ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: 10,
-                        itemBuilder: (context, index) {
-                          return InkWell(
-                            onTap: () {
-                              Navigator.pushNamed(context, ArticleScreen.id);
-                            },
-                            child: Row(children: [
-                              const ImageContainer(
-                                width: 80,
-                                imageUrl: "assets/gradient.png",
-                                height: 80,
-                                decide: false,
-                                margin: EdgeInsets.all(10),
-                                borderRadius: 20,
-                              ),
-                              Expanded(
-                                child: Column(
+                  )),
+            ),
+            // const SizedBox(
+            //   height: 30,
+            // ),
+            SizedBox(
+              height: 70,
+              width: 500,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 5),
+                    child: Chip(
+                      label: Text(
+                        strings[index],
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      backgroundColor: Colors.blueGrey,
+                      elevation: 4.0,
+                      shadowColor: Colors.grey[50],
+                    ),
+                  );
+                },
+                itemCount: strings.length,
+              ),
+            ),
+            // Wrap(
+            //   spacing: 8.0, // gap between adjacent chips
+            //   runSpacing: 1.0, // gap between lines
+            //   children: strings
+            //       .map((string) => )
+            //       .toList(),
+            // ),
+            const SizedBox(
+              height: 10,
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ImageContainer(
+                  width: 80,
+                  imageUrl: "${businessName["info"]["logo_url"]}",
+                  height: 90,
+                  decide: true,
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '${businessName["info"]["longName"]}',
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          color: AppColors.black, fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      '${businessName["info"]["fullTimeEmployees"]} Employees',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                            color: AppColors.black,
+                          ),
+                    ),
+                    SizedBox(
+                      width: 250,
+                      height: 80,
+                      child: Text(
+                        '${businessName["info"]["longBusinessSummary"]}.',
+                        maxLines: 3,
+                        overflow: TextOverflow.fade,
+                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                            color: AppColors.black,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+            Row(
+              children: [
+                RichText(
+                  // Controls visual overflow
+                  overflow: TextOverflow.clip,
+
+                  // Controls how the text should be aligned horizontally
+                  textAlign: TextAlign.end,
+
+                  // Control the text direction
+                  textDirection: TextDirection.rtl,
+
+                  // Whether the text should break at soft line breaks
+                  softWrap: true,
+
+                  // Maximum number of lines for the text to span
+                  maxLines: 1,
+
+                  // The number of font pixels for each logical pixel
+                  textScaleFactor: 1,
+                  text: TextSpan(
+                    text: 'Trending News From ',
+                    style: Theme.of(context).textTheme.headline6!.copyWith(
+                        color: AppColors.black, fontWeight: FontWeight.bold),
+                    children: const <TextSpan>[
+                      TextSpan(
+                          text: 'Apple',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.red,
+                              fontSize: 22)),
+                    ],
+                  ),
+                )
+              ],
+            ),
+            SizedBox(
+              height: 5,
+            ),
+            SizedBox(
+              height: 350,
+              child: FutureBuilder(
+                future: callBusinessNews(),
+                builder: (context, snapshot) {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.waiting:
+                      return const Center(child: CircularProgressIndicator());
+                    default:
+                      if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      } else if (snapshot.hasData) {
+                        return ListView.builder(
+                          // gridDelegate:
+                          //     const SliverGridDelegateWithFixedCrossAxisCount(
+                          //         crossAxisCount: 2,
+                          //         mainAxisExtent: 230,
+                          //         crossAxisSpacing: 12,
+                          //         mainAxisSpacing: 12,
+                          //         childAspectRatio: 20),
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            return Container(
+                              width: size.width * 0.5,
+                              height: 100,
+                              padding: const EdgeInsets.only(right: 5),
+                              child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
+                                    ImageContainer(
+                                        width: size.width * 0.4,
+                                        imageUrl:
+                                            "${snapshot.data![index]["urlToImage"]}",
+                                        decide: true),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
                                     Text(
-                                      "Voluptua sit est sit sed accusam elitr eos amet voluptua. Dolor dolores dolor lorem labore.",
+                                      '${snapshot.data![index]["title"]}',
                                       maxLines: 2,
-                                      overflow: TextOverflow.clip,
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyLarge!
                                           .copyWith(
-                                              fontWeight: FontWeight.bold),
+                                              // color: AppColors.black,
+                                              fontWeight: FontWeight.bold,
+                                              height: 1.5),
                                     ),
                                     const SizedBox(
-                                      height: 10,
+                                      height: 5,
                                     ),
-                                    Row(
-                                      children: [
-                                        const Icon(
-                                          Icons.schedule,
-                                          size: 18,
-                                          // color: Colors.grey,
-                                        ),
-                                        const SizedBox(
-                                          width: 5,
-                                        ),
-                                        Text('${DateTime.now().hour} hours ago',
-                                            maxLines: 2,
-                                            style:
-                                                const TextStyle(fontSize: 12)),
-                                        const SizedBox(
-                                          width: 20,
-                                        ),
-                                        const Icon(
-                                          Icons.visibility,
-                                          // color: Colors.grey,
-                                          size: 18,
-                                        ),
-                                        const SizedBox(
-                                          width: 5,
-                                        ),
-                                        const Text('300 views',
-                                            maxLines: 2,
-                                            style: TextStyle(fontSize: 12)),
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              )
-                            ]),
-                          );
-                        },
-                      ))
-                  .toList()),
-        )
-      ],
-    );
-  }
-}
-
-class _DiscoverNews extends StatelessWidget {
-  const _DiscoverNews({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.20,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Text(
-            'Discover',
-            style: Theme.of(context)
-                .textTheme
-                .headline4!
-                .copyWith(color: AppColors.black, fontWeight: FontWeight.bold),
-          ),
-          Text('News from all over the world',
-              style: Theme.of(context).textTheme.bodySmall!),
-          const SizedBox(
-            height: 15,
-          ),
-          TextFormField(
-            decoration: InputDecoration(
-                hintText: 'Search',
-                fillColor: Colors.grey.shade200,
-                filled: true,
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    borderSide: BorderSide.none),
-                prefixIcon: const Icon(
-                  Icons.search,
-                  color: AppColors.grey,
-                ),
-                suffixIcon: const RotatedBox(
-                  quarterTurns: 1,
-                  child: Icon(
-                    Icons.tune,
-                    color: AppColors.grey,
-                  ),
-                )),
-          )
-        ],
+                                    Text('${DateTime.now().hour} hours ago',
+                                        maxLines: 2,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall!),
+                                    Text(
+                                        '${snapshot.data![index]["source"]["name"]}',
+                                        maxLines: 2,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall!),
+                                  ]),
+                            );
+                            // return Container(
+                            //   width: size.width * 0.1,
+                            //   height: 100,
+                            //   padding: EdgeInsets.only(right: 10),
+                            //   child: Column(
+                            //       crossAxisAlignment: CrossAxisAlignment.start,
+                            //       children: [
+                            //         ImageContainer(
+                            //             width: size.width * 0.4,
+                            //             imageUrl:
+                            //                 "${snapshot.data![index]["urlToImage"]}",
+                            //             decide: true),
+                            //         const SizedBox(
+                            //           height: 10,
+                            //         ),
+                            //         Text(
+                            //           '${snapshot.data![index]["title"]}',
+                            //           maxLines: 2,
+                            //           style: Theme.of(context)
+                            //               .textTheme
+                            //               .bodyLarge!
+                            //               .copyWith(
+                            //                   // color: AppColors.black,
+                            //                   fontWeight: FontWeight.bold,
+                            //                   height: 1.5),
+                            //         ),
+                            //         const SizedBox(
+                            //           height: 5,
+                            //         ),
+                            //         Text('${DateTime.now().hour} hours ago',
+                            //             maxLines: 2,
+                            //             style: Theme.of(context)
+                            //                 .textTheme
+                            //                 .bodySmall!),
+                            //         Text(
+                            //             '${snapshot.data![index]["source"]["name"]}',
+                            //             maxLines: 2,
+                            //             style: Theme.of(context)
+                            //                 .textTheme
+                            //                 .bodySmall!),
+                            //       ]),
+                            // );
+                          },
+                          itemCount: 20,
+                        );
+                      } else {
+                        return const Text("No data yet");
+                      }
+                  }
+                },
+              ),
+              // child:
+            )
+          ],
+        ),
       ),
     );
   }
