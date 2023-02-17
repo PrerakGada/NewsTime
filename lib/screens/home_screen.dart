@@ -106,7 +106,7 @@ class _BreakingNews extends StatelessWidget {
     var dio = Dio();
     dio.options.baseUrl = 'https://jugaad-sahi-hai.mustansirg.in/';
 
-    final response = await dio.post('/news/');
+    final response = await dio.get('/news/');
     if (response.statusCode == 200) {
       return response.data;
     } else {

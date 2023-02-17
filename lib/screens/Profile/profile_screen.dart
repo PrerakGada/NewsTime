@@ -28,146 +28,153 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     // print(username);
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.only(top: 16, right: 16, left: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Align(
-              alignment: Alignment.topRight,
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: IconButton(
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
-                  onPressed: () {
-                    Navigator.pushNamed(context, Settings.id);
-                  },
-                  icon: const Icon(Icons.settings),
+    return Scaffold(
+      appBar: AppBar(
+        leading: ProfilePic(
+          // picUrl: "",
+          picUrl: "https://jugaad-sahi-hai.mustansirg.in/static/" +
+              UserStore().token['profile_photo'].toString(),
+          name: UserStore().token['username'].toString(),
+        ),
+        title:
+            Text("Welcome " + UserStore().token['username'].toString() + "!"),
+      ),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.only(top: 16, right: 16, left: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Align(
+                alignment: Alignment.topRight,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: IconButton(
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                    onPressed: () {
+                      Navigator.pushNamed(context, Settings.id);
+                    },
+                    icon: const Icon(Icons.settings),
+                  ),
                 ),
               ),
-            ),
-            Row(
-              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                ProfilePic(
-                  // picUrl: "",
-                  picUrl: "https://jugaad-sahi-hai.mustansirg.in/static/" +
-                      UserStore().token['profile_photo'].toString(),
-                  name: UserStore().token['username'].toString(),
-                ),
-                Expanded(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ProfileStatItem(title: 'Posts', count: 0),
-                      ProfileStatItem(title: 'Subscribers', count: 0),
-                      ProfileStatItem(title: 'Subscribed', count: 0),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                // Text(context.watch<UserStore>().getUser()),
-                Consumer<UserStore>(builder: (_, userStore, __) {
-                  // userStore.fetchCurrentUser();
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Prerak',
-                        style: Theme.of(context).textTheme.headlineMedium,
-                      ),
-                      // SizedBox(height: 8),
-                      // Text(
-                      //   userStore.currUser.bio.toString(),
-                      //   style: Theme.of(context)
-                      //       .textTheme
-                      //       .bodySmall
-                      //       ?.merge(const TextStyle()),
-                      // ),
-                    ],
-                  );
-                }),
-
-                MaterialButton(
-                  shape: ContinuousRectangleBorder(
-                      borderRadius: BorderRadius.circular(4),
-                      side: const BorderSide(color: AppColors.grey)),
-                  onPressed: () {
-                    Navigator.pushNamed(context, EditProfile.id);
-                  },
-                  child: Text('Edit Profile',
-                      style: Theme.of(context).textTheme.headlineMedium
-                      // ?.merge(const TextStyle(color: AppColors.grey)),
-                      ),
-                ),
-              ],
-            ),
-            Divider(thickness: 1),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                  vertical: 4,
-                  horizontal: MediaQuery.of(context).size.width * 0.1),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Row(
+                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  ProfileContentNavButton(
-                    currentIndex: currentIndex,
-                    index: 0,
-                    icon: Icons.copy_rounded,
-                    title: 'Posts',
-                    onPress: () {
-                      setState(() {
-                        currentIndex = 0;
-                        pageController.animateToPage(
-                          0,
-                          duration: const Duration(milliseconds: 200),
-                          curve: Curves.linear,
-                        );
-                      });
-                    },
+                  ProfilePic(
+                    // picUrl: "",
+                    picUrl: "https://jugaad-sahi-hai.mustansirg.in/static/" +
+                        UserStore().token['profile_photo'].toString(),
+                    name: UserStore().token['username'].toString(),
                   ),
-                  // ProfileContentNavButton(
-                  //   currentIndex: currentIndex,
-                  //   index: 1,
-                  //   icon: Icons.ios_share_rounded,
-                  //   title: 'Activity',
-                  //   onPress: () {
-                  //     setState(() {
-                  //       pageController.animateToPage(
-                  //         1,
-                  //         duration: const Duration(milliseconds: 200),
-                  //         curve: Curves.linear,
-                  //       );
-                  //     });
-                  //   },
-                  // ),
-
-                  ProfileContentNavButton(
-                    currentIndex: currentIndex,
-                    index: 1,
-                    icon: Icons.bookmark_border,
-                    title: 'Saved',
-                    onPress: () {
-                      setState(() {
-                        currentIndex = 1;
-                        pageController.animateToPage(
-                          1,
-                          duration: const Duration(milliseconds: 200),
-                          curve: Curves.linear,
-                        );
-                      });
-                    },
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ProfileStatItem(title: 'Posts', count: 0),
+                        ProfileStatItem(title: 'Subscribers', count: 0),
+                        ProfileStatItem(title: 'Subscribed', count: 0),
+                      ],
+                    ),
                   ),
                 ],
               ),
-            ),
-          ],
+              SizedBox(
+                height: 14,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // Text(context.watch<UserStore>().getUser()),
+                  Consumer<UserStore>(builder: (_, userStore, __) {
+                    // userStore.fetchCurrentUser();
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Prerak',
+                          style: Theme.of(context).textTheme.headlineMedium,
+                        ),
+                      ],
+                    );
+                  }),
+
+                  MaterialButton(
+                    shape: ContinuousRectangleBorder(
+                        borderRadius: BorderRadius.circular(4),
+                        side: const BorderSide(color: AppColors.grey)),
+                    onPressed: () {
+                      Navigator.pushNamed(context, EditProfile.id);
+                    },
+                    child: Text('Edit Profile',
+                        style: Theme.of(context).textTheme.headlineSmall
+                        // ?.merge(const TextStyle(color: AppColors.grey)),
+                        ),
+                  ),
+                ],
+              ),
+              Divider(thickness: 1),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    vertical: 4,
+                    horizontal: MediaQuery.of(context).size.width * 0.1),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ProfileContentNavButton(
+                      currentIndex: currentIndex,
+                      index: 0,
+                      icon: Icons.copy_rounded,
+                      title: 'Posts',
+                      onPress: () {
+                        setState(() {
+                          currentIndex = 0;
+                          pageController.animateToPage(
+                            0,
+                            duration: const Duration(milliseconds: 200),
+                            curve: Curves.linear,
+                          );
+                        });
+                      },
+                    ),
+                    // ProfileContentNavButton(
+                    //   currentIndex: currentIndex,
+                    //   index: 1,
+                    //   icon: Icons.ios_share_rounded,
+                    //   title: 'Activity',
+                    //   onPress: () {
+                    //     setState(() {
+                    //       pageController.animateToPage(
+                    //         1,
+                    //         duration: const Duration(milliseconds: 200),
+                    //         curve: Curves.linear,
+                    //       );
+                    //     });
+                    //   },
+                    // ),
+
+                    ProfileContentNavButton(
+                      currentIndex: currentIndex,
+                      index: 1,
+                      icon: Icons.bookmark_border,
+                      title: 'Saved',
+                      onPress: () {
+                        setState(() {
+                          currentIndex = 1;
+                          pageController.animateToPage(
+                            1,
+                            duration: const Duration(milliseconds: 200),
+                            curve: Curves.linear,
+                          );
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
