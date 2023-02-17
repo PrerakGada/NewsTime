@@ -19,7 +19,14 @@ class SearchFeedScreen extends StatefulWidget {
 class _SearchFeedScreenState extends State<SearchFeedScreen> {
   @override
   Widget build(BuildContext context) {
-    List<String> tabs = ["Health", "Politics", "Art", "Food", "Science"];
+    List<String> tabs = [
+      "Recommended",
+      "Health",
+      "Politics",
+      "Art",
+      "Food",
+      "Science"
+    ];
     return DefaultTabController(
       initialIndex: 0,
       length: tabs.length,
@@ -52,6 +59,7 @@ class _CustomTabs extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         TabBar(
           tabs: tabs
@@ -60,7 +68,7 @@ class _CustomTabs extends StatelessWidget {
                       e,
                       style: Theme.of(context)
                           .textTheme
-                          .headline6!
+                          .bodyMedium!
                           .copyWith(fontWeight: FontWeight.bold),
                     ),
                   ))
@@ -78,8 +86,7 @@ class _CustomTabs extends StatelessWidget {
                         itemBuilder: (context, index) {
                           return InkWell(
                             onTap: () {
-                              Navigator.pushNamed(
-                                  context, ArticleScreen.id);
+                              Navigator.pushNamed(context, ArticleScreen.id);
                             },
                             child: Row(children: [
                               const ImageContainer(
@@ -159,10 +166,10 @@ class _DiscoverNews extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.25,
+      height: MediaQuery.of(context).size.height * 0.20,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Text(
             'Discover',
@@ -174,7 +181,7 @@ class _DiscoverNews extends StatelessWidget {
           Text('News from all over the world',
               style: Theme.of(context).textTheme.bodySmall!),
           const SizedBox(
-            height: 20,
+            height: 15,
           ),
           TextFormField(
             decoration: InputDecoration(
