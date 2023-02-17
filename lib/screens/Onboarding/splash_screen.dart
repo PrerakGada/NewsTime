@@ -31,6 +31,7 @@ class _SplashScreenState extends State<SplashScreen>
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await UserStore().refresh();
       await handleNavigation();
+      await UserStore().callApis();
     });
     _animationController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 100));

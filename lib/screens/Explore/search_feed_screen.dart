@@ -11,9 +11,11 @@ import '../../stores/user_store.dart';
 import '../first_feed_screen.dart';
 
 class SearchFeedScreen extends StatefulWidget {
-  const SearchFeedScreen({super.key});
+   SearchFeedScreen({super.key});
 
   static const id = '/feed';
+
+
 
   @override
   State<SearchFeedScreen> createState() => _SearchFeedScreenState();
@@ -21,6 +23,7 @@ class SearchFeedScreen extends StatefulWidget {
 
 class _SearchFeedScreenState extends State<SearchFeedScreen> {
   bool _showFirstScreen = true;
+  final PageController _pageController = PageController();
   void _toggleScreen() {
     setState(() {
       _showFirstScreen = !_showFirstScreen;
@@ -42,7 +45,14 @@ class _SearchFeedScreenState extends State<SearchFeedScreen> {
       length: tabs.length,
       child: Scaffold(
         floatingActionButton: FloatingActionButton(
-          onPressed: _toggleScreen,
+          // onPressed: _toggleScreen,
+          onPressed: () {
+            _toggleScreen();
+            // callApis();
+            UserStore().RefreshToken;
+             _pageController.animateToPage(_showFirstScreen ? 0 : 1, duration: Duration(milliseconds: 100), curve: Curves.linear);
+            // _showFirstScreen ? Navigator.pushReplacement(context, BusinessScreen()) :
+          },
           child: Icon(Icons.swap_horiz),
         ),
         appBar: AppBar(
@@ -55,7 +65,15 @@ class _SearchFeedScreenState extends State<SearchFeedScreen> {
               ),
               onPressed: () {},
             )),
-        body: _showFirstScreen ? FirstScreen(tabs: tabs) : BusinessScreen(),
+        body: PageView(
+          controller: _pageController,
+          physics: NeverScrollableScrollPhysics(),
+          children: [
+            FirstScreen(tabs: tabs),
+            BusinessScreen(),
+          ],
+        ),
+        // body: _showFirstScreen ? FirstScreen(tabs: tabs) : BusinessScreen(),
       ),
     );
   }
@@ -63,6 +81,7 @@ class _SearchFeedScreenState extends State<SearchFeedScreen> {
 
 class BusinessScreen extends StatefulWidget {
   const BusinessScreen({super.key});
+
   static const id = "/businessRoute";
 
   @override
@@ -83,20 +102,8 @@ class _BusinessScreenState extends State<BusinessScreen> {
     'BAJFINANCE',
     'TECHM'
   ];
-  Future<Map<dynamic, dynamic>> callApis() async {
-    var dio = Dio();
-    dio.options.baseUrl = 'https://jugaad-sahi-hai.mustansirg.in/';
-    dio.options.headers
-        .addAll({'authorization': 'Bearer ${UserStore().APIToken}'});
 
-    final response = await dio.get('business/?ticker=aapl');
-    if (response.statusCode == 200) {
-      businessName = response.data;
-      return response.data;
-    } else {
-      return {};
-    }
-  }
+
 
   Future<List<dynamic>> callBusinessNews() async {
     var dio = Dio();
@@ -116,9 +123,9 @@ class _BusinessScreenState extends State<BusinessScreen> {
   @override
   void initState() {
     // TODO: implement initState
-    callApis();
-    super.initState();
+    UserStore().callApis();
     UserStore().RefreshToken;
+    super.initState();
   }
 
   @override
@@ -194,7 +201,7 @@ class _BusinessScreenState extends State<BusinessScreen> {
               children: [
                 ImageContainer(
                   width: 80,
-                  imageUrl: "${businessName["info"]["logo_url"]}",
+                  imageUrl: "${UserStore().businessName["info"]["logo_url"]}",
                   height: 90,
                   decide: true,
                 ),
@@ -205,12 +212,12 @@ class _BusinessScreenState extends State<BusinessScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '${businessName["info"]["longName"]}',
+                      '${UserStore().businessName["info"]["longName"]}',
                       style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                           color: AppColors.black, fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      '${businessName["info"]["fullTimeEmployees"]} Employees',
+                      '${UserStore().businessName["info"]["fullTimeEmployees"]} Employees',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.bodySmall!.copyWith(
@@ -221,7 +228,7 @@ class _BusinessScreenState extends State<BusinessScreen> {
                       width: 250,
                       height: 80,
                       child: Text(
-                        '${businessName["info"]["longBusinessSummary"]}.',
+                        '${UserStore().businessName["info"]["longBusinessSummary"]}.',
                         maxLines: 3,
                         overflow: TextOverflow.fade,
                         style: Theme.of(context).textTheme.bodySmall!.copyWith(

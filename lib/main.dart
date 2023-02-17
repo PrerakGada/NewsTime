@@ -15,6 +15,7 @@ import 'Theme/light_theme.dart';
 import 'firebase_options.dart';
 import 'screens/Profile/edit_profile.dart';
 import 'screens/Settings/settings.dart';
+import 'screens/Testing.dart';
 import 'screens/onboarding/login_screen.dart';
 import 'screens/onboarding/onboarding_screen.dart';
 import 'screens/onboarding/splash_screen.dart';
@@ -86,7 +87,7 @@ class MyApp extends StatelessWidget {
           Settings.id: (context) => Settings(),
           SearchFeedScreen.id: (context) => SearchFeedScreen(),
           ArticleScreen.id: (context) => ArticleScreen(),
-          BusinessScreen.id: (context) => BusinessScreen()
+          // BusinessScreen.id: (context) => BusinessScreen(),
         },
       ),
     );

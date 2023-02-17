@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:news_time/Theme/app_colors.dart';
 import 'package:news_time/screens/Profile/profile_screen.dart';
 import 'package:news_time/screens/Explore/search_feed_screen.dart';
+import 'package:news_time/stores/user_store.dart';
 import 'package:news_time/widgets/custom_tag.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 
 import '../stores/user_store.dart';
 import '../widgets/bottom_nav_bar.dart';
@@ -99,7 +101,9 @@ class NewsFeedScreen extends StatelessWidget {
 }
 
 class _BreakingNews extends StatelessWidget {
-  const _BreakingNews({
+  final FlutterTts ftts = FlutterTts();
+
+  _BreakingNews({
     Key? key,
   }) : super(key: key);
 
@@ -170,107 +174,125 @@ class _BreakingNews extends StatelessWidget {
                         shrinkWrap: true,
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (context, index) {
-                          return Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15),
-                                  color: Colors.transparent,
-                                  image: DecorationImage(
-                                      fit: BoxFit.fitHeight,
-                                      image: NetworkImage(
-                                        "${snapshot.data![index]["image"]}",
-                                      ))),
-                              child: Stack(
-                                children: [
-                                  Positioned(
-                                      bottom: -1,
-                                      child: Container(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.6,
-                                        height: 100,
-                                        decoration: const BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius: BorderRadius.only(
-                                                bottomLeft: Radius.circular(15),
-                                                bottomRight:
-                                                    Radius.circular(15))),
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 5, right: 5),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                '${snapshot.data![index]["title"]}',
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyMedium!
-                                                    .copyWith(
-                                                        // color: AppColors.black,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        height: 1.5),
-                                              ),
-                                              Text(
-                                                '${snapshot.data![index]["summary"]}',
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyLarge!
-                                                    .copyWith(
-                                                        // color: AppColors.black,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        height: 1.5),
-                                              ),
-                                              const SizedBox(
-                                                height: 3,
-                                              ),
-                                              Row(
-                                                children: [
-                                                  Text(
-                                                      '${snapshot.data![index]["source"]}',
-                                                      maxLines: 2,
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .bodySmall!),
-                                                  Spacer(),
-                                                  Column(
-                                                    children: [
-                                                      Text(
-                                                          '${DateTime.now().hour} hours ago',
-                                                          maxLines: 2,
-                                                          style:
-                                                              Theme.of(context)
-                                                                  .textTheme
-                                                                  .bodySmall!),
-                                                      Row(
-                                                        children: [
-                                                          Icon(Icons
-                                                              .favorite_rounded),
-                                                          Icon(Icons.bookmark),
-                                                        ],
-                                                      )
-                                                    ],
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ))
-                                ],
-                              )
-                              // child: Column(
-                              //     crossAxisAlignment: CrossAxisAlignment.start,
-                              //     children: [
+                          return InkWell(
+                            onTap: () async {
+                              //your custom configuration
+                              await ftts.setLanguage("en-US");
+                              await ftts.setSpeechRate(0.5); //speed of speech
+                              await ftts.setVolume(1.0); //volume of speech
+                              await ftts.setPitch(1); //pitch of sound
 
-                              //     ]),
-                              );
+                              //play text to sp
+                              var result = await ftts
+                                  .speak('${snapshot.data![index]["content"]}');
+                              if (result == 1) {
+                                //speaking
+                              } else {
+                                //not speaking
+                              }
+                            },
+                            child: Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15),
+                                    color: Colors.transparent,
+                                    image: DecorationImage(
+                                        fit: BoxFit.fitHeight,
+                                        image: NetworkImage(
+                                          "${snapshot.data![index]["image"]}",
+                                        ))),
+                                child: Stack(
+                                  children: [
+                                    Positioned(
+                                        bottom: -1,
+                                        child: Container(
+                                          width:
+                                              MediaQuery.of(context).size.width *
+                                                  0.6,
+                                          height: 100,
+                                          decoration: const BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius: BorderRadius.only(
+                                                  bottomLeft: Radius.circular(15),
+                                                  bottomRight:
+                                                      Radius.circular(15))),
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 5, right: 5),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  '${snapshot.data![index]["title"]}',
+                                                  maxLines: 1,
+                                                  overflow: TextOverflow.ellipsis,
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyMedium!
+                                                      .copyWith(
+                                                          // color: AppColors.black,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          height: 1.5),
+                                                ),
+                                                Text(
+                                                  '${snapshot.data![index]["summary"]}',
+                                                  maxLines: 1,
+                                                  overflow: TextOverflow.ellipsis,
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyLarge!
+                                                      .copyWith(
+                                                          // color: AppColors.black,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          height: 1.5),
+                                                ),
+                                                const SizedBox(
+                                                  height: 3,
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    Text(
+                                                        '${snapshot.data![index]["source"]}',
+                                                        maxLines: 2,
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .bodySmall!),
+                                                    Spacer(),
+                                                    Column(
+                                                      children: [
+                                                        Text(
+                                                            '${DateTime.now().hour} hours ago',
+                                                            maxLines: 2,
+                                                            style:
+                                                                Theme.of(context)
+                                                                    .textTheme
+                                                                    .bodySmall!),
+                                                        Row(
+                                                          children: [
+                                                            Icon(Icons
+                                                                .favorite_rounded),
+                                                            Icon(Icons.bookmark),
+                                                          ],
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ))
+                                  ],
+                                )
+                                // child: Column(
+                                //     crossAxisAlignment: CrossAxisAlignment.start,
+                                //     children: [
+
+                                //     ]),
+                                ),
+                          );
                           // return Container(
                           //   width: size.width * 0.1,
                           //   height: 100,
