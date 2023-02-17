@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:news_time/screens/article_screen.dart';
+import 'package:news_time/screens/home_screen.dart';
+import 'package:news_time/screens/search_feed_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'Theme/dark_theme.dart';
@@ -63,13 +66,16 @@ class MyApp extends StatelessWidget {
         // initialRoute: ProviderVerification.id,
         // initialRoute: ProviderVerification.id,
         // initialRoute: ExploreMap.id,
-        initialRoute: SplashScreen.id,
+        initialRoute: HomeScreen.homescreenRoute,
         //initialRoute: AdminDashBoard.id,
         routes: {
           SplashScreen.id: (context) => const SplashScreen(),
           LoginScreen.id: (context) => LoginScreen(),
           SignUpPage.id: (context) => SignUpPage(),
           OnboardingScreen.id: (context) => OnboardingScreen(),
+          HomeScreen.homescreenRoute: (context) => HomeScreen(),
+          SearchFeed.feedRoute: (context) => SearchFeed(),
+          ArticleScreen.articleRoute: (context) => ArticleScreen()
           // CustomerHome.id: (context) => CustomerHome(),
           // ProviderVerification.id: (context) => ProviderVerification(),
           // AdminDashBoard.id: (context) => AdminDashBoard(),
