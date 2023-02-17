@@ -19,7 +19,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.0.0-244.0.dev <4.0.0'
+  sdk: '>=2.18.1 <4.0.0'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -39,7 +39,6 @@ dependencies:
   # Packages
   smooth_page_indicator: ^1.0.1
   lottie: ^2.2.0
-  flutter_svg: ^2.0.1
   shared_preferences: ^2.0.17
   http: ^0.13.5
   http_parser: ^4.0.2

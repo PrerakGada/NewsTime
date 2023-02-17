@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -10,7 +9,6 @@ import 'screens/onboarding/onboarding_screen.dart';
 import 'screens/onboarding/splash_screen.dart';
 import 'stores/user_store.dart';
 import 'screens/onboarding/register_screen.dart';
-
 
 Future<void> main() async {
   // WidgetsFlutterBinding.ensureInitialized();
