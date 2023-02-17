@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:news_time/Theme/app_colors.dart';
-import 'package:news_time/screens/profile_screen.dart';
+import 'package:news_time/screens/Profile/profile_screen.dart';
 import 'package:news_time/screens/search_feed_screen.dart';
 import 'package:news_time/widgets/custom_tag.dart';
 
