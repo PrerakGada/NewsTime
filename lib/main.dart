@@ -1,7 +1,10 @@
+
 import 'package:flutter/material.dart';
 import 'package:news_time/screens/article_screen.dart';
 import 'package:news_time/screens/home_screen.dart';
 import 'package:news_time/screens/search_feed_screen.dart';
+import 'package:news_time/screens/Onboarding/register_screen.dart';
+import 'package:news_time/screens/dashboard.dart';
 import 'package:provider/provider.dart';
 
 import 'Theme/dark_theme.dart';
@@ -11,7 +14,6 @@ import 'screens/onboarding/login_screen.dart';
 import 'screens/onboarding/onboarding_screen.dart';
 import 'screens/onboarding/splash_screen.dart';
 import 'stores/user_store.dart';
-import 'screens/onboarding/register_screen.dart';
 
 Future<void> main() async {
   // WidgetsFlutterBinding.ensureInitialized();
@@ -66,24 +68,17 @@ class MyApp extends StatelessWidget {
         // initialRoute: ProviderVerification.id,
         // initialRoute: ProviderVerification.id,
         // initialRoute: ExploreMap.id,
-        initialRoute: HomeScreen.homescreenRoute,
+        initialRoute: SplashScreen.id,
         //initialRoute: AdminDashBoard.id,
         routes: {
           SplashScreen.id: (context) => const SplashScreen(),
           LoginScreen.id: (context) => LoginScreen(),
-          SignUpPage.id: (context) => SignUpPage(),
           OnboardingScreen.id: (context) => OnboardingScreen(),
-          HomeScreen.homescreenRoute: (context) => HomeScreen(),
-          SearchFeed.feedRoute: (context) => SearchFeed(),
+          RegisterScreen.id: (context) => RegisterScreen(),
+          DashboardScreen.id: (context) => DashboardScreen(),
+          HomeScreen.id: (context) => HomeScreen(),
+          SearchFeedScreen.feedRoute: (context) => SearchFeedScreen(),
           ArticleScreen.articleRoute: (context) => ArticleScreen()
-          // CustomerHome.id: (context) => CustomerHome(),
-          // ProviderVerification.id: (context) => ProviderVerification(),
-          // AdminDashBoard.id: (context) => AdminDashBoard(),
-          // HomeScreen.id: (context) => HomeScreen(),
-          // ProviderDashBoard.id: (context) => ProviderDashBoard(),
-          // ProfileScreen.id: (context) => ProfileScreen(),
-          // ExploreMap.id: (context) => ExploreMap(),
-          // ProviderHomeScreen.id: (context) => ProviderHomeScreen(),
         },
       ),
     );
