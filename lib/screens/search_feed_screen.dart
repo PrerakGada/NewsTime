@@ -5,7 +5,7 @@ import 'package:news_time/screens/article_screen.dart';
 import 'package:news_time/widgets/bottom_nav_bar.dart';
 import 'package:news_time/widgets/image_container.dart';
 
-import '../../Theme/app_colors.dart';
+import '../Theme/app_colors.dart';
 
 class SearchFeedScreen extends StatefulWidget {
   const SearchFeedScreen({super.key});
@@ -42,12 +42,8 @@ class _SearchFeedScreenState extends State<SearchFeedScreen> {
               onPressed: () {},
             )),
         body: ListView(
-          padding: const EdgeInsets.only(left: 20, right: 20),
-          children: [
-            const _DiscoverNews(),
-            _CustomTabs(tabs: tabs),
-          ],
-        ),
+            padding: const EdgeInsets.only(left: 20, right: 20),
+            children: [const _DiscoverNews(), _CustomTabs(tabs: tabs)]),
       ),
     );
   }
@@ -62,6 +58,18 @@ class _CustomTabs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Future<List<dynamic>> callApis() async {
+      var dio = Dio();
+      dio.options.baseUrl = 'https://jugaad-sahi-hai.mustansirg.in/';
+
+      final response = await dio.get('/news/');
+      if (response.statusCode == 200) {
+        return response.data;
+      } else {
+        return [];
+      }
+    }
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [

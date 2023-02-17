@@ -13,6 +13,8 @@ class UserStore extends StateKeeper {
   factory UserStore() => _instance;
 
   var token;
+  var APIToken;
+  var RefreshToken;
 
   Future refresh() async {
     final prefs = await SharedPreferences.getInstance();
@@ -30,6 +32,9 @@ class UserStore extends StateKeeper {
       var data = jsonDecode(response.body);
       print("Refresh Response: " + data.toString());
       await prefs.setString('APIToken', data['access']);
+      APIToken = data['access'];
+      RefreshToken = data['refresh'];
+
       print(data);
       token = JwtDecoder.decode(data['access']);
       print("Decoded After Refresh: " + token.toString());
@@ -54,13 +59,16 @@ class UserStore extends StateKeeper {
         "password": password,
       }),
     );
+
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       print(data);
       await prefs.setString('APIToken', data['access']);
       await prefs.setString('RefreshToken', data['refresh']);
+      APIToken = data['access'];
+      RefreshToken = data['refresh'];
 
-      final APIToken = prefs.getString('APIToken');
+      // final APIToken = prefs.getString('APIToken');
       token = JwtDecoder.decode(APIToken.toString());
       print(token);
       notifyListeners();
@@ -97,6 +105,8 @@ class UserStore extends StateKeeper {
       print(data);
       await prefs.setString('APIToken', data['access_token']);
       await prefs.setString('RefreshToken', data['refresh_token']);
+      APIToken = data['access'];
+      RefreshToken = data['refresh'];
       refresh();
       return true;
     } else {
