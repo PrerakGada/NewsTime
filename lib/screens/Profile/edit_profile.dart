@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -107,34 +106,19 @@ class _EditProfileState extends State<EditProfile> {
               Column(
                 // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  (profilePic == null)
-                      ? imageUrl != null
-                          ? Align(
-                              alignment: Alignment.center,
-                              child: Container(
-                                child: ProfilePic(
-                                  picUrl:
-                                      "https://jugaad-sahi-hai.mustansirg.in/static/" +
-                                          UserStore()
-                                              .token['profile_photo']
-                                              .toString(),
-                                  name:
-                                      UserStore().token['username'].toString(),
-                                ),
-                              ),
-                            )
-                          : Align(
-                              alignment: Alignment.center,
-                              child: Container(
-                                child: Image.file(
-                                  profilePic!.absolute,
-                                  height: 200,
-                                  width: 280,
-                                  scale: 2,
-                                  fit: BoxFit.fill,
-                                ),
-                              ),
-                            )
+                  (profilePic != null)
+                      ? Align(
+                          alignment: Alignment.center,
+                          child: Container(
+                            child: Image.file(
+                              profilePic!.absolute,
+                              height: 200,
+                              width: 280,
+                              scale: 2,
+                              fit: BoxFit.fill,
+                            ),
+                          ),
+                        )
                       : Align(
                           alignment: Alignment.center,
                           child: Container(
@@ -146,16 +130,14 @@ class _EditProfileState extends State<EditProfile> {
                                 onPickImageButtonClicked();
                               },
                               child: ProfilePic(
-                                picUrl:
-                                    "https://jugaad-sahi-hai.mustansirg.in/static/" +
-                                        UserStore()
-                                            .token['profile_photo']
-                                            .toString(),
+                                picUrl: "https://jugaad-sahi-hai.mustansirg.in/static/" +
+                                    UserStore().token['profile_photo'].toString(),
                                 name: UserStore().token['username'].toString(),
                               ),
                             ),
                           ),
                         ),
+
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 20.0),
                     child: Column(
