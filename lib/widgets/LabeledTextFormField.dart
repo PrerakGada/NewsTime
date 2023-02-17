@@ -45,7 +45,7 @@ class _LabeledTextFormFieldState extends State<LabeledTextFormField> {
           width: widget.width == null ? null : widget.width,
           padding: EdgeInsets.only(left: 16),
           decoration: BoxDecoration(
-            color: AppColors.black,
+            color: AppColors.greyLight,
             borderRadius: BorderRadius.circular(8),
           ),
           child: TextFormField(
@@ -54,9 +54,9 @@ class _LabeledTextFormFieldState extends State<LabeledTextFormField> {
             decoration: InputDecoration(
               suffixIcon: (widget.icon != null)
                   ? IconButton(
-                onPressed: widget.function,
-                icon: Icon(widget.icon),
-              )
+                      onPressed: widget.function,
+                      icon: Icon(widget.icon),
+                    )
                   : null,
               hintText: widget.hintTitle,
               hintStyle: Theme.of(context).textTheme.bodySmall,
