@@ -5,7 +5,7 @@ import 'package:news_time/screens/article_screen.dart';
 import 'package:news_time/widgets/bottom_nav_bar.dart';
 import 'package:news_time/widgets/image_container.dart';
 
-import '../Theme/app_colors.dart';
+import '../../Theme/app_colors.dart';
 
 class SearchFeedScreen extends StatefulWidget {
   const SearchFeedScreen({super.key});

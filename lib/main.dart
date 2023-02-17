@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:news_time/screens/article_screen.dart';
 import 'package:news_time/screens/home_screen.dart';
 import 'package:news_time/screens/Profile/profile_screen.dart';
-import 'package:news_time/screens/search_feed_screen.dart';
+import 'package:news_time/screens/Explore/search_feed_screen.dart';
 import 'package:news_time/screens/Onboarding/register_screen.dart';
 import 'package:news_time/screens/dashboard.dart';
 import 'package:provider/provider.dart';

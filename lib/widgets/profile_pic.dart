@@ -5,7 +5,7 @@ class ProfilePic extends StatelessWidget {
   final String name;
   final double radius;
 
-  ProfilePic({Key? key, required this.picUrl, required this.name, this.radius = 24})
+  ProfilePic({Key? key, required this.picUrl, required this.name, this.radius = 30})
       : super(key: key);
 
   @override
