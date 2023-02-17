@@ -5,6 +5,7 @@ import 'package:news_time/screens/Profile/profile_screen.dart';
 import 'package:news_time/screens/Explore/search_feed_screen.dart';
 import 'package:news_time/widgets/custom_tag.dart';
 
+import '../stores/user_store.dart';
 import '../widgets/bottom_nav_bar.dart';
 import '../widgets/image_container.dart';
 
@@ -105,6 +106,8 @@ class _BreakingNews extends StatelessWidget {
   Future<List<dynamic>> callApis() async {
     var dio = Dio();
     dio.options.baseUrl = 'https://jugaad-sahi-hai.mustansirg.in/';
+    dio.options.headers
+        .addAll({'authorization': 'Bearer ${UserStore().APIToken}'});
 
     final response = await dio.get('/news/');
     if (response.statusCode == 200) {

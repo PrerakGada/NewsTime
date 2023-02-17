@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:news_time/screens/business_screen.dart';
 import 'package:news_time/screens/dashboard.dart';
 import 'package:news_time/screens/home_screen.dart';
 import 'package:news_time/stores/user_store.dart';
@@ -44,9 +45,8 @@ class _SplashScreenState extends State<SplashScreen>
       () => Navigator.pushReplacement(
         context,
         PageRouteBuilder(
-          pageBuilder: (_, __, ___) => (UserStore().token != null)
-              ? HomeScreen()
-              : LoginScreen(),
+          pageBuilder: (_, __, ___) =>
+              (UserStore().token != null) ? HomeScreen() : LoginScreen(),
           transitionDuration: const Duration(milliseconds: 300),
           transitionsBuilder: (_, a, __, c) =>
               FadeTransition(opacity: a, child: c),
