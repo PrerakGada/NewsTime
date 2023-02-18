@@ -5,8 +5,10 @@ import 'image_container.dart';
 
 class DiscoverItem extends StatelessWidget {
   const DiscoverItem({
-    super.key,
+    super.key, this.currPost,
   });
+
+  final currPost;
 
   @override
   Widget build(BuildContext context) {
@@ -15,9 +17,9 @@ class DiscoverItem extends StatelessWidget {
         Navigator.pushNamed(context, ArticleScreen.id);
       },
       child: Row(children: [
-        const ImageContainer(
+         ImageContainer(
           width: 80,
-          imageUrl: "assets/gradient.png",
+          imageUrl: currPost['image'],
           height: 80,
           decide: false,
           margin: EdgeInsets.all(10),
@@ -28,7 +30,7 @@ class DiscoverItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Voluptua sit est sit sed accusam elitr eos amet voluptua. Dolor dolores dolor lorem labore.",
+                currPost['title'],
                 maxLines: 2,
                 overflow: TextOverflow.clip,
                 style: Theme.of(context)
