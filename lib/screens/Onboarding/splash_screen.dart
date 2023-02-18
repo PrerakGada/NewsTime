@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:news_time/screens/business_screen.dart';
-import 'package:news_time/screens/dashboard.dart';
+import 'package:news_time/screens/Explore/business_screen.dart';
+
 import 'package:news_time/screens/home_screen.dart';
 import 'package:news_time/stores/user_store.dart';
 
@@ -31,6 +31,7 @@ class _SplashScreenState extends State<SplashScreen>
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await UserStore().refresh();
       await handleNavigation();
+      await UserStore().callApis();
     });
     _animationController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 100));

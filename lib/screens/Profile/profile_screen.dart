@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:news_time/screens/Profile/edit_profile.dart';
 import 'package:news_time/screens/Settings/settings.dart';
+import 'package:news_time/screens/liked_news_screen.dart';
+import 'package:news_time/screens/preferences_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../../../Theme/app_colors.dart';
@@ -20,12 +22,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   int currentIndex = 0;
   var pageController = PageController();
   int currentindex = -1;
-  List itemList = [
-    'Liked News',
-    'BookMarks',
-    'Get Rent Agreement',
-    'Remove Post'
-  ];
+  List itemList = ['Add Preferences', 'Liked News', 'Bookmarks', 'Remove Post'];
 
   @override
   void initState() {
@@ -196,15 +193,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             setState(() {
                               currentindex = index;
                             });
-                            // currentindex == 1
-                            //     ? Navigator.push(
-                            //         context,
-                            //         PageTransition(
-                            //           child: const PreferencesScreen(),
-                            //           type: PageTransitionType.fade,
-                            //         ),
-                            //       )
-                            //     : null;
+                            currentindex == 0
+                                ? Navigator.pushNamed(
+                                    context, PreferencesScreen.id)
+                                : Navigator.pushNamed(context, LikedNews.id);
                           },
                           child: Container(
                             alignment: Alignment.center,

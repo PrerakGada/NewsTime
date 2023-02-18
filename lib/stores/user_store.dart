@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -121,5 +122,21 @@ class UserStore extends StateKeeper {
     prefs.clear();
     token = null;
     notifyListeners();
+  }
+
+  var businessName;
+  Future<Map<dynamic, dynamic>> callApis() async {
+    var dio = Dio();
+    dio.options.baseUrl = 'https://jugaad-sahi-hai.mustansirg.in/';
+    dio.options.headers
+        .addAll({'authorization': 'Bearer ${UserStore().APIToken}'});
+
+    final response = await dio.get('business/?ticker=aapl');
+    if (response.statusCode == 200) {
+      businessName = response.data;
+      return response.data;
+    } else {
+      return {};
+    }
   }
 }

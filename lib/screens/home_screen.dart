@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:news_time/Theme/app_colors.dart';
 import 'package:news_time/screens/Profile/profile_screen.dart';
 import 'package:news_time/screens/Explore/search_feed_screen.dart';
+import 'package:news_time/stores/user_store.dart';
 import 'package:news_time/widgets/custom_tag.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 
 import '../stores/user_store.dart';
 import '../widgets/bottom_nav_bar.dart';
@@ -11,6 +13,7 @@ import '../widgets/image_container.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
   static const id = "/home";
 
   @override
@@ -20,6 +23,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final PageController _pageController = PageController();
   int currentIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,7 +103,7 @@ class NewsFeedScreen extends StatelessWidget {
 }
 
 class _BreakingNews extends StatefulWidget {
-  const _BreakingNews({
+  _BreakingNews({
     Key? key,
   }) : super(key: key);
 
@@ -108,6 +112,7 @@ class _BreakingNews extends StatefulWidget {
 }
 
 class _BreakingNewsState extends State<_BreakingNews> {
+  final FlutterTts ftts = FlutterTts();
   bool resultofLike = false;
   Future<List<dynamic>> callApis() async {
     var dio = Dio();
@@ -190,149 +195,130 @@ class _BreakingNewsState extends State<_BreakingNews> {
                         shrinkWrap: true,
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (context, index) {
-                          return Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15),
-                                  color: Colors.transparent,
-                                  image: DecorationImage(
-                                      fit: BoxFit.fitHeight,
-                                      image: NetworkImage(
-                                        "${snapshot.data![index]["image"]}",
-                                      ))),
-                              child: Stack(
-                                children: [
-                                  Positioned(
-                                      bottom: -1,
-                                      child: Container(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.6,
-                                        height: 95,
-                                        decoration: const BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius: BorderRadius.only(
-                                                bottomLeft: Radius.circular(15),
-                                                bottomRight:
-                                                    Radius.circular(15))),
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 10, right: 10),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                '${snapshot.data![index]["title"]}',
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyMedium!
-                                                    .copyWith(
-                                                        // color: AppColors.black,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        height: 1.5),
-                                              ),
-                                              Text(
-                                                '${snapshot.data![index]["summary"]}',
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyLarge!
-                                                    .copyWith(
-                                                        // color: AppColors.black,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        height: 1.5),
-                                              ),
-                                              const SizedBox(
-                                                height: 3,
-                                              ),
-                                              Row(
-                                                children: [
-                                                  Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Text(
-                                                          '${snapshot.data![index]["source"]}',
-                                                          maxLines: 2,
-                                                          style:
-                                                              Theme.of(context)
-                                                                  .textTheme
-                                                                  .bodySmall!),
-                                                      Text(
-                                                          '${DateTime.now().hour} hours ago',
-                                                          maxLines: 2,
-                                                          style:
-                                                              Theme.of(context)
-                                                                  .textTheme
-                                                                  .bodySmall!),
-                                                    ],
-                                                  ),
-                                                  const Spacer(),
-                                                  Column(
-                                                    children: [
-                                                      Row(
-                                                        children: [
-                                                          InkWell(
-                                                            onTap: () async {
-                                                              bool result =
-                                                                  await likeNews(
-                                                                      snapshot.data![
-                                                                              index]
-                                                                          [
-                                                                          "id"]);
-                                                              setState(() {
-                                                                if (result ==
-                                                                    true) {
-                                                                  resultofLike =
-                                                                      true;
-                                                                }
-                                                              });
-                                                            },
-                                                            child: Icon(
-                                                              resultofLike ==
-                                                                      true
-                                                                  ? Icons
-                                                                      .favorite_rounded
-                                                                  : Icons
-                                                                      .favorite_outline_rounded,
-                                                              color:
-                                                                  resultofLike ==
-                                                                          true
-                                                                      ? Colors
-                                                                          .pink
-                                                                      : Colors
-                                                                          .grey,
-                                                            ),
-                                                          ),
-                                                          const Icon(
-                                                            Icons
-                                                                .bookmark_add_outlined,
-                                                            color: Colors.grey,
-                                                          ),
-                                                        ],
-                                                      )
-                                                    ],
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ))
-                                ],
-                              )
-                              // child: Column(
-                              //     crossAxisAlignment: CrossAxisAlignment.start,
-                              //     children: [
+                          return InkWell(
+                            onTap: () async {
+                              //your custom configuration
+                              await ftts.setLanguage("en-IN");
+                              await ftts.setSpeechRate(0.5); //speed of speech
+                              await ftts.setVolume(1.0); //volume of speech
+                              await ftts.setPitch(1); //pitch of sound
 
-                              //     ]),
-                              );
+                              //play text to sp
+                              var result = await ftts
+                                  .speak('${snapshot.data![index]["content"]}');
+                              if (result == 1) {
+                                print('Speaking');
+                              } else {
+                                print('Not Speaking');
+                              }
+                            },
+                            child: Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15),
+                                    color: Colors.transparent,
+                                    image: DecorationImage(
+                                        fit: BoxFit.fitHeight,
+                                        image: NetworkImage(
+                                          "${snapshot.data![index]["image"]}",
+                                        ))),
+                                child: Stack(
+                                  children: [
+                                    Positioned(
+                                        bottom: -1,
+                                        child: Container(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.6,
+                                          height: 100,
+                                          decoration: const BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius: BorderRadius.only(
+                                                  bottomLeft:
+                                                      Radius.circular(15),
+                                                  bottomRight:
+                                                      Radius.circular(15))),
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 5, right: 5),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  '${snapshot.data![index]["title"]}',
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyMedium!
+                                                      .copyWith(
+                                                          // color: AppColors.black,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          height: 1.5),
+                                                ),
+                                                Text(
+                                                  '${snapshot.data![index]["summary"]}',
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyLarge!
+                                                      .copyWith(
+                                                          // color: AppColors.black,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          height: 1.5),
+                                                ),
+                                                const SizedBox(
+                                                  height: 3,
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    Text(
+                                                        '${snapshot.data![index]["source"]}',
+                                                        maxLines: 2,
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .bodySmall!),
+                                                    Spacer(),
+                                                    Column(
+                                                      children: [
+                                                        Text(
+                                                            '${DateTime.now().hour} hours ago',
+                                                            maxLines: 2,
+                                                            style: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .bodySmall!),
+                                                        Row(
+                                                          children: [
+                                                            Icon(Icons
+                                                                .favorite_rounded),
+                                                            Icon(
+                                                                Icons.bookmark),
+                                                          ],
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ))
+                                  ],
+                                )
+                                // child: Column(
+                                //     crossAxisAlignment: CrossAxisAlignment.start,
+                                //     children: [
+
+                                //     ]),
+                                ),
+                          );
                           // return Container(
                           //   width: size.width * 0.1,
                           //   height: 100,
@@ -434,46 +420,64 @@ class _BreakingNewsState extends State<_BreakingNews> {
                         shrinkWrap: true,
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (context, index) {
-                          return Container(
-                            width: size.width * 0.5,
-                            height: 100,
-                            padding: const EdgeInsets.only(right: 5),
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  ImageContainer(
-                                      width: size.width * 0.4,
-                                      imageUrl:
-                                          "${snapshot.data![index + 5]["image"]}",
-                                      decide: true),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Text(
-                                    '${snapshot.data![index + 5]["title"]}',
-                                    maxLines: 2,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyLarge!
-                                        .copyWith(
-                                            // color: AppColors.black,
-                                            fontWeight: FontWeight.bold,
-                                            height: 1.5),
-                                  ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  Text('${DateTime.now().hour} hours ago',
+                          return InkWell(
+                            onTap: () async {
+                              //your custom configuration
+                              await ftts.setLanguage("en-US");
+                              await ftts.setSpeechRate(0.5); //speed of speech
+                              await ftts.setVolume(1.0); //volume of speech
+                              await ftts.setPitch(1); //pitc of sound
+
+                              //play text to sp
+                              var result = await ftts.speak(
+                                  "${snapshot.data![index + 5]["content"]}");
+                              if (result == 1) {
+                                //speaking
+                              } else {
+                                //not speaking
+                              }
+                            },
+                            child: Container(
+                              width: size.width * 0.5,
+                              height: 100,
+                              padding: const EdgeInsets.only(right: 5),
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    ImageContainer(
+                                        width: size.width * 0.4,
+                                        imageUrl:
+                                            "${snapshot.data![index + 5]["image"]}",
+                                        decide: true),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    Text(
+                                      '${snapshot.data![index + 5]["title"]}',
                                       maxLines: 2,
                                       style: Theme.of(context)
                                           .textTheme
-                                          .bodySmall!),
-                                  Text('${snapshot.data![index]["source"]}',
-                                      maxLines: 2,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall!),
-                                ]),
+                                          .bodyLarge!
+                                          .copyWith(
+                                              // color: AppColors.black,
+                                              fontWeight: FontWeight.bold,
+                                              height: 1.5),
+                                    ),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text('${DateTime.now().hour} hours ago',
+                                        maxLines: 2,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall!),
+                                    Text('${snapshot.data![index]["source"]}',
+                                        maxLines: 2,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall!),
+                                  ]),
+                            ),
                           );
                           // return Container(
                           //   width: size.width * 0.1,
