@@ -122,14 +122,14 @@ class _BusinessScreenState extends State<BusinessScreen> {
             ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              children: const [
                 // ImageContainer(
                 //   width: 80,
                 //   imageUrl: "${UserStore().businessName["info"]["logo_url"]}",
                 //   height: 90,
                 //   decide: true,
                 // ),
-                const SizedBox(
+                SizedBox(
                   width: 10,
                 ),
                 // Column(
@@ -204,7 +204,7 @@ class _BusinessScreenState extends State<BusinessScreen> {
               height: 5,
             ),
             SizedBox(
-              height: 350,
+              height: 220,
               child: FutureBuilder(
                 future: callBusinessNews(),
                 builder: (context, snapshot) {
@@ -228,7 +228,7 @@ class _BusinessScreenState extends State<BusinessScreen> {
                           itemBuilder: (context, index) {
                             return Container(
                               width: size.width * 0.5,
-                              height: 100,
+                              height: 50,
                               padding: const EdgeInsets.only(right: 5),
                               child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -320,6 +320,38 @@ class _BusinessScreenState extends State<BusinessScreen> {
                 },
               ),
               // child:
+            ),
+            RichText(
+              // Controls visual overflow
+              overflow: TextOverflow.clip,
+
+              // Controls how the text should be aligned horizontally
+              textAlign: TextAlign.end,
+
+              // Control the text direction
+              textDirection: TextDirection.rtl,
+
+              // Whether the text should break at soft line breaks
+              softWrap: true,
+
+              // Maximum number of lines for the text to span
+              maxLines: 1,
+
+              // The number of font pixels for each logical pixel
+              textScaleFactor: 1,
+              text: TextSpan(
+                text: 'Charts ',
+                style: Theme.of(context).textTheme.headline6!.copyWith(
+                    color: AppColors.black, fontWeight: FontWeight.bold),
+                children: const <TextSpan>[
+                  // TextSpan(
+                  //     text: '',
+                  //     style: TextStyle(
+                  //         fontWeight: FontWeight.bold,
+                  //         color: Colors.red,
+                  //         fontSize: 22)),
+                ],
+              ),
             )
           ],
         ),

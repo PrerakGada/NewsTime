@@ -57,6 +57,7 @@ dependencies:
   candlesticks: ^2.1.0
   web_socket_channel: ^2.3.0
   syncfusion_flutter_charts: ^20.4.50
+  fl_chart: ^0.60.0
 
 
 
