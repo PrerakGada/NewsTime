@@ -8,7 +8,7 @@ import 'package:news_time/widgets/image_container.dart';
 
 import '../../Theme/app_colors.dart';
 import '../../stores/user_store.dart';
-import 'first_feed_screen.dart';
+import 'discover_news.dart';
 
 class SearchFeedScreen extends StatefulWidget {
   SearchFeedScreen({super.key});
@@ -32,12 +32,16 @@ class _SearchFeedScreenState extends State<SearchFeedScreen> {
   @override
   Widget build(BuildContext context) {
     List<String> tabs = [
-      "Recommended",
-      "Health",
-      "Politics",
-      "Art",
-      "Food",
-      "Science"
+      "Business",
+      "Entertainment",
+      "General",
+      "Coronavirus",
+      "Science",
+      "Cricket",
+      "Football",
+      "Technology",
+      "Artificial Intelligence",
+      "Tennis",
     ];
     return DefaultTabController(
       initialIndex: 0,
@@ -55,22 +59,11 @@ class _SearchFeedScreenState extends State<SearchFeedScreen> {
           },
           child: Icon(Icons.swap_horiz),
         ),
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          leading: IconButton(
-            icon: const Icon(
-              Icons.menu,
-              color: Colors.black,
-            ),
-            onPressed: () {},
-          ),
-        ),
         body: PageView(
           controller: _pageController,
           physics: NeverScrollableScrollPhysics(),
           children: [
-            FirstScreen(),
+            DiscoverNews(),
             BusinessScreen(),
           ],
         ),
