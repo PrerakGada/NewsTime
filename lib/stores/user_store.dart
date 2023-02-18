@@ -124,7 +124,8 @@ class UserStore extends StateKeeper {
     notifyListeners();
   }
 
-   List<dynamic> searchPosts = [];
+  List<dynamic> searchPosts = [];
+  late String selectedChip = '';
 
   Future search({required String searchText}) async {
     final prefs = await SharedPreferences.getInstance();
@@ -165,6 +166,24 @@ class UserStore extends StateKeeper {
       return response.data;
     } else {
       return {};
+    }
+  }
+
+  var forYouNews;
+  Future<List<dynamic>> queryNews() async {
+    var dio = Dio();
+    dio.options.baseUrl = 'https://jugaad-sahi-hai.mustansirg.in/';
+    dio.options.headers
+        .addAll({'authorization': 'Bearer $APIToken'});
+
+    final response = await dio.get('/news/');
+    if (response.statusCode == 200) {
+      forYouNews = response.data;
+      print(forYouNews.runtimeType);
+      notifyListeners();
+      return response.data;
+    } else {
+      return [];
     }
   }
 }

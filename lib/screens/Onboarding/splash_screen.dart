@@ -31,6 +31,8 @@ class _SplashScreenState extends State<SplashScreen>
       await UserStore().refresh();
       await handleNavigation();
       await UserStore().callApis();
+      await UserStore().queryNews();
+
     });
     _animationController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 100));
