@@ -49,6 +49,7 @@ class _SearchFeedScreenState extends State<SearchFeedScreen> {
       child: Scaffold(
         floatingActionButton: FloatingActionButton(
           // onPressed: _toggleScreen,
+          backgroundColor: Colors.black,
           onPressed: () {
             _toggleScreen();
             // callApis();
@@ -57,7 +58,10 @@ class _SearchFeedScreenState extends State<SearchFeedScreen> {
                 duration: Duration(milliseconds: 100), curve: Curves.linear);
             // _showFirstScreen ? Navigator.pushReplacement(context, BusinessScreen()) :
           },
-          child: Icon(Icons.swap_horiz),
+          child: Icon(
+            Icons.swap_horiz,
+            color: Colors.white,
+          ),
         ),
         body: PageView(
           controller: _pageController,
@@ -72,5 +76,3 @@ class _SearchFeedScreenState extends State<SearchFeedScreen> {
     );
   }
 }
-
-
