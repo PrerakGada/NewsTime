@@ -20,8 +20,8 @@ class _DiscoverNewsState extends State<DiscoverNews>
   final TextEditingController _searchController = TextEditingController();
 
   final List<String> tabs = [
-    "Business",
     "Recommended",
+    "Business",
     "Entertainment",
     "General",
     "Coronavirus",
@@ -107,13 +107,24 @@ class _DiscoverNewsState extends State<DiscoverNews>
                             padding: EdgeInsets.symmetric(horizontal: 8),
                             child: InkWell(
                               onTap: () async {
-                                UserStore().selectedChip = tabs[index].toString();
+                                UserStore().selectedChip =
+                                    tabs[index].toString();
                                 await UserStore()
                                     .search(searchText: tabs[index].toString());
-
                               },
-                              child: Chip(backgroundColor: (UserStore().selectedChip == tabs[index].toString()) ? AppColors.primary : AppColors.greyLight,
-                                label: Text(tabs[index].toString(), style: TextStyle(color: (UserStore().selectedChip == tabs[index].toString()) ? AppColors.white : AppColors.black),),
+                              child: Chip(
+                                backgroundColor: (UserStore().selectedChip ==
+                                        tabs[index].toString())
+                                    ? AppColors.primary
+                                    : AppColors.greyLight,
+                                label: Text(
+                                  tabs[index].toString(),
+                                  style: TextStyle(
+                                      color: (UserStore().selectedChip ==
+                                              tabs[index].toString())
+                                          ? AppColors.white
+                                          : AppColors.black),
+                                ),
                               ),
                             ),
                           );
@@ -148,4 +159,3 @@ class _DiscoverNewsState extends State<DiscoverNews>
     );
   }
 }
-
