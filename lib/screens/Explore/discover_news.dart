@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:news_time/stores/user_store.dart';
+import 'package:provider/provider.dart';
 
 import '../../Theme/app_colors.dart';
 import '../../widgets/discover_item.dart';
@@ -15,6 +17,7 @@ class DiscoverNews extends StatefulWidget {
 class _DiscoverNewsState extends State<DiscoverNews>
     with TickerProviderStateMixin {
   late TabController _tabController;
+  final TextEditingController _searchController = TextEditingController();
 
   final List<String> tabs = [
     "Business",
@@ -56,40 +59,8 @@ class _DiscoverNewsState extends State<DiscoverNews>
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
-        child: Stack(
+        child: Column(
           children: [
-            SizedBox(
-              height: MediaQuery.of(context).size.height,
-              child: TabBarView(
-                controller: _tabController,
-                children: [
-                  Container(
-                    child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: 10,
-                        itemBuilder: (context, index) {
-                          return DiscoverItem();
-                        }),
-                  ),
-                  Container(
-                    child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: 10,
-                        itemBuilder: (context, index) {
-                          return DiscoverItem();
-                        }),
-                  ),
-                  Container(
-                    child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: 10,
-                        itemBuilder: (context, index) {
-                          return DiscoverItem();
-                        }),
-                  ),
-                ],
-              ),
-            ),
             Container(
               color: AppColors.white,
               child: Column(
@@ -99,6 +70,10 @@ class _DiscoverNewsState extends State<DiscoverNews>
                 children: [
                   const SizedBox(height: 15),
                   TextFormField(
+                    controller: _searchController,
+                    onEditingComplete: () {
+                      UserStore().search(searchText: _searchController.text);
+                    },
                     decoration: InputDecoration(
                       hintText: 'Search',
                       fillColor: AppColors.greyLight,
@@ -119,6 +94,17 @@ class _DiscoverNewsState extends State<DiscoverNews>
                       ),
                     ),
                   ),
+                  Container(
+                    height: 40,
+                    width: 50,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: 4,
+                      itemBuilder: (context, index) {
+                        return Container(child: Text('a'),);
+                      },
+                    ),
+                  ),
                   TabBar(
                     controller: _tabController,
                     tabs: tabs
@@ -137,6 +123,24 @@ class _DiscoverNewsState extends State<DiscoverNews>
                   ),
                 ],
               ),
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.7,
+              child: Consumer<UserStore>(builder: (_, userStore, __) {
+                final List<dynamic> searchPosts = userStore.searchPosts;
+                return (searchPosts.isNotEmpty)
+                    ? ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: searchPosts.length,
+                        itemBuilder: (context, index) {
+                          final currPost = searchPosts[index];
+                          // print(currPost);
+                          return DiscoverItem(currPost: currPost);
+                        })
+                    : Center(
+                        child: Text('No NewsFeed'),
+                      );
+              }),
             ),
           ],
         ),
