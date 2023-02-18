@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:news_time/screens/Profile/edit_profile.dart';
 import 'package:news_time/screens/Settings/settings.dart';
+import 'package:news_time/screens/categories_drawer.dart';
 import 'package:news_time/screens/liked_news_screen.dart';
-import 'package:news_time/screens/preferences_screen.dart';
+
 import 'package:provider/provider.dart';
 
 import '../../../Theme/app_colors.dart';
@@ -194,9 +195,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               currentindex = index;
                             });
                             currentindex == 0
-                                ? Navigator.pushNamed(
-                                    context, PreferencesScreen.id)
-                                : Navigator.pushNamed(context, LikedNews.id);
+                                ? Navigator.pushNamed(context, Categories.id)
+                                : Navigator.pushNamed(context, LikedScreen.id);
                           },
                           child: Container(
                             alignment: Alignment.center,

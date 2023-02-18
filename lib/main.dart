@@ -3,13 +3,12 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'package:flutter/material.dart';
 import 'package:news_time/screens/Explore/article_screen.dart';
-import 'package:news_time/screens/Explore/business_screen.dart';
+import 'package:news_time/screens/categories_drawer.dart';
 import 'package:news_time/screens/home_screen.dart';
 import 'package:news_time/screens/Profile/profile_screen.dart';
 import 'package:news_time/screens/Explore/search_feed_screen.dart';
 import 'package:news_time/screens/Onboarding/register_screen.dart';
 import 'package:news_time/screens/liked_news_screen.dart';
-import 'package:news_time/screens/preferences_screen.dart';
 
 import 'package:provider/provider.dart';
 import 'Theme/dark_theme.dart';
@@ -17,7 +16,6 @@ import 'Theme/light_theme.dart';
 import 'firebase_options.dart';
 import 'screens/Profile/edit_profile.dart';
 import 'screens/Settings/settings.dart';
-import 'screens/Testing.dart';
 import 'screens/onboarding/login_screen.dart';
 import 'screens/onboarding/onboarding_screen.dart';
 import 'screens/onboarding/splash_screen.dart';
@@ -89,8 +87,9 @@ class MyApp extends StatelessWidget {
           Settings.id: (context) => Settings(),
           SearchFeedScreen.id: (context) => SearchFeedScreen(),
           ArticleScreen.id: (context) => ArticleScreen(),
-          PreferencesScreen.id: (context) => PreferencesScreen(),
-          LikedNews.id: (context) => LikedNews()
+          LikedScreen.id: (context) => LikedScreen(),
+
+          Categories.id: (context) => Categories()
           // BusinessScreen.id: (context) => BusinessScreen(),
         },
       ),

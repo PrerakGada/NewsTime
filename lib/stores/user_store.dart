@@ -124,7 +124,38 @@ class UserStore extends StateKeeper {
     notifyListeners();
   }
 
+  Future search({required String searchText}) async {
+    final prefs = await SharedPreferences.getInstance();
+    // Register
+    var response = await http.post(
+      Uri.parse("https://jugaad-sahi-hai.mustansirg.in/news/search/?category=$searchText"),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    );
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      // print(data);
+      await prefs.setString('APIToken', data['access']);
+      await prefs.setString('RefreshToken', data['refresh']);
+      APIToken = data['access'];
+      RefreshToken = data['refresh'];
+
+      // final APIToken = prefs.getString('APIToken');
+      token = JwtDecoder.decode(APIToken.toString());
+      // print(token);
+      notifyListeners();
+      return true;
+    } else {
+      print("Failed to Fetch");
+      print(response.body);
+      return false;
+  }
+    }
+
   var businessName;
+
   Future<Map<dynamic, dynamic>> callApis() async {
     var dio = Dio();
     dio.options.baseUrl = 'https://jugaad-sahi-hai.mustansirg.in/';
