@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:news_time/screens/graph_screen.dart';
 
 import '../../Theme/app_colors.dart';
 import '../../stores/user_store.dart';
@@ -200,7 +201,7 @@ class _BusinessScreenState extends State<BusinessScreen> {
                 )
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
             SizedBox(
@@ -321,37 +322,77 @@ class _BusinessScreenState extends State<BusinessScreen> {
               ),
               // child:
             ),
-            RichText(
-              // Controls visual overflow
-              overflow: TextOverflow.clip,
+            // RichText(
+            //   // Controls visual overflow
+            //   overflow: TextOverflow.clip,
 
-              // Controls how the text should be aligned horizontally
-              textAlign: TextAlign.end,
+            //   // Controls how the text should be aligned horizontally
+            //   textAlign: TextAlign.end,
 
-              // Control the text direction
-              textDirection: TextDirection.rtl,
+            //   // Control the text direction
+            //   textDirection: TextDirection.rtl,
 
-              // Whether the text should break at soft line breaks
-              softWrap: true,
+            //   // Whether the text should break at soft line breaks
+            //   softWrap: true,
 
-              // Maximum number of lines for the text to span
-              maxLines: 1,
+            //   // Maximum number of lines for the text to span
+            //   maxLines: 1,
 
-              // The number of font pixels for each logical pixel
-              textScaleFactor: 1,
-              text: TextSpan(
-                text: 'Charts ',
-                style: Theme.of(context).textTheme.headline6!.copyWith(
-                    color: AppColors.black, fontWeight: FontWeight.bold),
-                children: const <TextSpan>[
-                  // TextSpan(
-                  //     text: '',
-                  //     style: TextStyle(
-                  //         fontWeight: FontWeight.bold,
-                  //         color: Colors.red,
-                  //         fontSize: 22)),
-                ],
-              ),
+            //   // The number of font pixels for each logical pixel
+            //   textScaleFactor: 1,
+            //   text: TextSpan(
+            //     text: 'Charts ',
+            //     style: Theme.of(context).textTheme.headline6!.copyWith(
+            //         color: AppColors.black, fontWeight: FontWeight.bold),
+            //     children: const <TextSpan>[
+            //       // TextSpan(
+            //       //     text: '',
+            //       //     style: TextStyle(
+            //       //         fontWeight: FontWeight.bold,
+            //       //         color: Colors.red,
+            //       //         fontSize: 22)),
+            //     ],
+            //   ),
+            // ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Charts',
+                  style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                      color: AppColors.black, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                InkWell(
+                  onTap: () {
+                    print(UserStore().businessName["stock"]);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => GraphScreen(
+                                  data: UserStore().businessName["stock"],
+                                )));
+                  },
+                  child: Text(
+                    'More ->',
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                          color: AppColors.black,
+                        ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            const ImageContainer(
+              width: double.infinity,
+              height: 250,
+              imageUrl:
+                  "https://res.cloudinary.com/practicaldev/image/fetch/s--HrcWs6QD--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_auto%2Cw_880/https://thepracticaldev.s3.amazonaws.com/i/3cd67f80gv7lf1s408o0.png",
+              decide: true,
             )
           ],
         ),

@@ -4,6 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:news_time/screens/Explore/article_screen.dart';
 import 'package:news_time/screens/categories_drawer.dart';
+import 'package:news_time/screens/graph_screen.dart';
 import 'package:news_time/screens/home_screen.dart';
 import 'package:news_time/screens/Profile/profile_screen.dart';
 import 'package:news_time/screens/Explore/search_feed_screen.dart';
@@ -88,7 +89,7 @@ class MyApp extends StatelessWidget {
           SearchFeedScreen.id: (context) => SearchFeedScreen(),
           ArticleScreen.id: (context) => ArticleScreen(),
           LikedScreen.id: (context) => LikedScreen(),
-
+          GraphScreen.id: (context) => GraphScreen(),
           Categories.id: (context) => Categories()
           // BusinessScreen.id: (context) => BusinessScreen(),
         },
