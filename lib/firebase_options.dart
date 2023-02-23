@@ -67,6 +67,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '258722761535',
     projectId: 'newstime-cc7c3',
     storageBucket: 'newstime-cc7c3.appspot.com',
+    androidClientId: '258722761535-q9a7dnhnq44qjfe92eip51u13qu8tss2.apps.googleusercontent.com',
     iosClientId: '258722761535-ej7svoa50mgmk31djls70c9fntv2fteq.apps.googleusercontent.com',
     iosBundleId: 'com.example.newsTime',
   );
@@ -77,6 +78,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '258722761535',
     projectId: 'newstime-cc7c3',
     storageBucket: 'newstime-cc7c3.appspot.com',
+    androidClientId: '258722761535-q9a7dnhnq44qjfe92eip51u13qu8tss2.apps.googleusercontent.com',
     iosClientId: '258722761535-7qmi257ls4djvmf94434qsiv5r72smr8.apps.googleusercontent.com',
     iosBundleId: 'com.example.newsTime.RunnerTests',
   );
